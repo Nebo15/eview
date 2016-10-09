@@ -1,5 +1,4 @@
 language: elixir
-
 cache:
   directories:
   - deps
@@ -11,9 +10,6 @@ otp_release:
 env:
   global:
     - MIX_ENV=test
-    - DOCKER_HUB_ACCOUNT=place_your_account_name_here
-    - MAIN_BRANCHES="master develop staging" # Branches on which you want version to be incremented
-before_install:
 script:
   # Install dependencies
   - "mix deps.get"
