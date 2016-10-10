@@ -9,11 +9,13 @@ defmodule EView do
     end
   end
 
-  # TODO: allow to use any assign expressions
   defmacro view(name, assigns, do: block) do
     function_name = String.to_atom("render")
     quote do
-      def unquote(function_name)(unquote(name), unquote(assigns)), do: unquote(block) |> format(unquote(assigns))
+      def unquote(function_name)(unquote(name), unquote(assigns) = all_assigns) do
+        unquote(block)
+        |> format(all_assigns)
+      end
     end
   end
 
