@@ -4,7 +4,7 @@ defmodule Demo.PageView do
   """
 
   use Demo.Web, :view
-  use EView, :view
+  use EView
 
   view("page.json", %{data: data} = assigns) do
     data

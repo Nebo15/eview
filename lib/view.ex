@@ -1,40 +1,102 @@
-defmodule EView do
-  @moduledoc """
-  A module defining __using__ hooks for controllers,
-  views and so on.
-
-  This can be used in your application as:
-
-      use EView, :controller
-      use EView, :view
-  """
-
-  def controller do
-    quote do
-      import EView.Controller
-    end
-  end
-
-  def view do
-    quote do
-      import EView.View
-    end
-  end
-
-  @doc """
-  When used, dispatch to the appropriate controller/view/etc.
-  """
-  defmacro __using__(which) when is_atom(which) do
-    apply(__MODULE__, which, [])
-  end
-end
-
 # TODO: idempotency_key plug that will receive header and set it back to `conn`
 # TODO: pagination
+defmodule EView do
+  alias EView.{MetaView, ErrorView, DataView}
+
+  defmacro __using__(_) do
+    quote do
+      import EView
+    end
+  end
+
+  # TODO: allow to use any assign expressions
+  defmacro view(name, assigns, do: block) do
+    function_name = String.to_atom("render")
+    quote do
+      def unquote(function_name)(unquote(name), unquote(assigns)), do: unquote(block) |> format(unquote(assigns))
+    end
+  end
+
+  # TODO: modelview
+  # TODO: errorview
+  # TODO: add default 500 error
+
+  # HTTP 4XX, 5XX status codes - Error Response
+  def format(data, %{status: status} = assigns) when 400 <= status and status < 600 do
+    %{
+      meta: MetaView.render(data, assigns),
+      error: ErrorView.render(data)
+    }
+  end
+
+  # HTTP 2XX, 3XX and all other status codes - Success Response
+  def format(data, assigns) do
+    %{
+      meta: MetaView.render(data, assigns),
+      data: DataView.render(data, assigns)
+    }
+    |> put_paging(assigns)
+    |> put_urgent(assigns)
+    |> put_sandbox(assigns)
+  end
+
+  # Add `paging` property. To use it just add `paging` in `render/2` assigns.
+  defp put_paging(data, %{paging: paging}), do: data |> Map.put(:paging, paging)
+  defp put_paging(data, _assigns), do: data
+
+  # Add `urgent` property. To use it just add `urgent` in `render/2` assigns.
+  defp put_urgent(data, %{urgent: urgent}), do: data |> Map.put(:urgent, urgent)
+  defp put_urgent(data, _assigns), do: data
+
+  # Add `sandbox` property. To use it just add `sandbox` in `render/2` assigns.
+  defp put_sandbox(data, %{sandbox: sandbox}) do
+    if Mix.env in [:test, :dev], do: Map.put(data, :sandbox, sandbox), else: data
+  end
+  defp put_sandbox(data, _assigns), do: data
+end
+
+
+# {
+#   "meta": {
+#     "url": "https://qbill.ly/transactions/",
+#     "type": "list",
+#     "code": "200",
+#     "idempotency_key": "iXXekd88DKqo",
+#     "request_id": "qudk48fFlaP"
+#   },
+#   "urgent": {
+#     "notifications": ["Read new emails!"],
+#     "unseen_payments": 10
+#   },
+#   "data": {
+#     "type": "resource_name",
+#     <...>
+#   },
+#   "paging": {
+#     "limit": 50,
+#     "cursors": {
+#       "starting_after": "MTAxNTExOTQ1MjAwNzI5NDE=",
+#       "ending_before": "NDMyNzQyODI3OTQw"
+#     },
+#     "has_more": true
+#   },
+#   "sandbox": {
+#     "debug_varibale": "39384",
+#     "live": "false"
+#   }
+# }
 
 defmodule EView.MetaView do
+  @moduledoc """
+  This module builds common `meta` structure from response data and assigns.
+  """
   import Plug.Conn
 
+  @doc """
+  Render new `meta` object by `render/2` assigns and data that will be sent to API consumer.
+
+  TODO: `data` is present to extract response type (object or list). This logic can be moved on one level above.
+  """
   def render(data, %{conn: conn}) do
     %{
       url: get_url(conn),
@@ -114,82 +176,3 @@ defmodule EView.ErrorView do
   end
 end
 
-defmodule EView.View do
-  alias EView.{MetaView, ErrorView, DataView}
-
-  # TODO: allow to use any assign expressions
-  defmacro view(name, assigns, do: block) do
-    function_name = String.to_atom("render")
-    quote do
-      def unquote(function_name)(unquote(name), unquote(assigns)), do: unquote(block) |> format(unquote(assigns))
-    end
-  end
-
-  # TODO: modelview
-  # TODO: errorview
-  # TODO: add default 500 error
-
-  # HTTP 4XX, 5XX status codes - Error Response
-  def format(data, %{status: status} = assigns) when 400 <= status and status < 600 do
-    %{
-      meta: MetaView.render(data, assigns),
-      error: ErrorView.render(data)
-    }
-  end
-
-  # HTTP 2XX, 3XX and all other status codes - Success Response
-  def format(data, assigns) do
-    %{
-      meta: MetaView.render(data, assigns),
-      data: DataView.render(data, assigns)
-    }
-    |> put_paging(assigns)
-    |> put_urgent(assigns)
-    |> put_sandbox(assigns)
-  end
-
-  # Add `paging` property. To use it just add `paging` in `render/2` assigns.
-  defp put_paging(data, %{paging: paging}), do: data |> Map.put(:paging, paging)
-  defp put_paging(data, _assigns), do: data
-
-  # Add `urgent` property. To use it just add `urgent` in `render/2` assigns.
-  defp put_urgent(data, %{urgent: urgent}), do: data |> Map.put(:urgent, urgent)
-  defp put_urgent(data, _assigns), do: data
-
-  # Add `sandbox` property. To use it just add `sandbox` in `render/2` assigns.
-  defp put_sandbox(data, %{sandbox: sandbox}) do
-    if Mix.env in [:test, :dev], do: Map.put(data, :sandbox, sandbox), else: data
-  end
-  defp put_sandbox(data, _assigns), do: data
-end
-
-
-# {
-#   "meta": {
-#     "url": "https://qbill.ly/transactions/",
-#     "type": "list",
-#     "code": "200",
-#     "idempotency_key": "iXXekd88DKqo",
-#     "request_id": "qudk48fFlaP"
-#   },
-#   "urgent": {
-#     "notifications": ["Read new emails!"],
-#     "unseen_payments": 10
-#   },
-#   "data": {
-#     "type": "resource_name",
-#     <...>
-#   },
-#   "paging": {
-#     "limit": 50,
-#     "cursors": {
-#       "starting_after": "MTAxNTExOTQ1MjAwNzI5NDE=",
-#       "ending_before": "NDMyNzQyODI3OTQw"
-#     },
-#     "has_more": true
-#   },
-#   "sandbox": {
-#     "debug_varibale": "39384",
-#     "live": "false"
-#   }
-# }
