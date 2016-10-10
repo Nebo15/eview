@@ -1,4 +1,4 @@
-# Tokenizer
+# Demo
 
 In [Nebo #15](http://nebo15.com) we have our own [API design manifest](http://docs.apimanifest.apiary.io/), and we trying to follow it.
 

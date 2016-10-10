@@ -1,1 +1,2 @@
+Demo.start()
 ExUnit.start()

@@ -1,4 +1,4 @@
-defmodule Tokenizer.Mixfile do
+defmodule EView.Mixfile do
   use Mix.Project
 
   @version "0.1.0"
@@ -23,12 +23,16 @@ defmodule Tokenizer.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger, :confex]]
+    [applications: [:logger, :plug,
+
+                    :ecto, :postgrex, :cowboy, :httpoison,
+                    :poison, :phoenix, :timex, :jvalid, :timex_ecto,
+                    :phoenix_ecto]]
   end
 
   # Specifies which paths to compile per environment.
-  defp elixirc_paths(:test), do: ["lib", "web", "test/support"]
-  defp elixirc_paths(_),     do: ["lib", "web"]
+  defp elixirc_paths(:test), do: ["lib", "web", "test/support", "demo"]
+  defp elixirc_paths(_),     do: ["lib", "web", "demo"]
 
   # Dependencies can be Hex packages:
   #
@@ -44,7 +48,17 @@ defmodule Tokenizer.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    [{:ex_doc, ">= 0.0.0", only: [:dev, :test]},
+    [{:ecto, "2.1.0-rc.2", override: true}, # TODO: Update when Ecto will release v2.1
+     {:postgrex, "~> 0.12"},
+     {:cowboy, "~> 1.0"},
+     {:httpoison, "~> 0.9.2"},
+     {:poison, "~> 3.0", override: true},
+     {:phoenix, "~> 1.2"},
+     {:jvalid, "~> 0.3.0"},
+     {:timex, "~> 3.0"},
+     {:timex_ecto, "~> 3.0"},
+     {:phoenix_ecto, "3.1.0-rc.0"}, # TODO: Update when Ecto will release v2.1
+     {:ex_doc, ">= 0.0.0", only: [:dev, :test]},
      {:excoveralls, "~> 0.5", only: [:dev, :test]},
      {:dogma, "> 0.1.0", only: [:dev, :test]},
      {:credo, ">= 0.4.8", only: [:dev, :test]}]
