@@ -1,6 +1,51 @@
 # TODO: idempotency_key plug that will receive header and set it back to `conn`
 # TODO: pagination
+# TODO: move acceptance case to this module (with helpers that validate structure and makes easy to extract data)
+
+# {
+#   "meta": {
+#     "url": "https://qbill.ly/transactions/",
+#     "type": "list",
+#     "code": "200",
+#     "idempotency_key": "iXXekd88DKqo",
+#     "request_id": "qudk48fFlaP"
+#   },
+#   "urgent": {
+#     "notifications": ["Read new emails!"],
+#     "unseen_payments": 10
+#   },
+#   "data": {
+#     "type": "resource_name",
+#     <...>
+#   },
+#   "paging": {
+#     "limit": 50,
+#     "cursors": {
+#       "starting_after": "MTAxNTExOTQ1MjAwNzI5NDE=",
+#       "ending_before": "NDMyNzQyODI3OTQw"
+#     },
+#     "has_more": true
+#   },
+#   "sandbox": {
+#     "debug_varibale": "39384",
+#     "live": "false"
+#   }
+# }
+
 defmodule EView do
+  @moduledoc """
+  This module defines common helpers and macros that should be used in views of your API app.
+
+  # Example:
+      defmodule Demo.PageView do
+        use Demo.Web, :view
+        use EView
+
+        view("page.json", %{data: data}) do
+          data
+        end
+      end
+  """
   alias EView.{MetaView, ErrorView, DataView}
 
   defmacro __using__(_) do
@@ -9,9 +54,11 @@ defmodule EView do
     end
   end
 
+  # TODO: rename to `defrender`?
   defmacro view(name, assigns, do: block) do
     function_name = String.to_atom("render")
     quote do
+      # TODO: maybe get object name from render name instead of view module?
       def unquote(function_name)(unquote(name), unquote(assigns) = all_assigns) do
         unquote(block)
         |> format(all_assigns)
@@ -43,7 +90,15 @@ defmodule EView do
   end
 
   # Add `paging` property. To use it just add `paging` in `render/2` assigns.
-  defp put_paging(data, %{paging: paging}), do: data |> Map.put(:paging, paging)
+  defp put_paging(data, %{paging: %{
+                            limit: limit,
+                            cursors: %{starting_after: _, ending_before: _},
+                            has_more: has_more
+                          } = paging
+                        }) when is_integer(limit) and is_boolean(has_more) do
+    data
+    |> Map.put(:paging, paging)
+  end
   defp put_paging(data, _assigns), do: data
 
   # Add `urgent` property. To use it just add `urgent` in `render/2` assigns.
@@ -56,37 +111,6 @@ defmodule EView do
   end
   defp put_sandbox(data, _assigns), do: data
 end
-
-
-# {
-#   "meta": {
-#     "url": "https://qbill.ly/transactions/",
-#     "type": "list",
-#     "code": "200",
-#     "idempotency_key": "iXXekd88DKqo",
-#     "request_id": "qudk48fFlaP"
-#   },
-#   "urgent": {
-#     "notifications": ["Read new emails!"],
-#     "unseen_payments": 10
-#   },
-#   "data": {
-#     "type": "resource_name",
-#     <...>
-#   },
-#   "paging": {
-#     "limit": 50,
-#     "cursors": {
-#       "starting_after": "MTAxNTExOTQ1MjAwNzI5NDE=",
-#       "ending_before": "NDMyNzQyODI3OTQw"
-#     },
-#     "has_more": true
-#   },
-#   "sandbox": {
-#     "debug_varibale": "39384",
-#     "live": "false"
-#   }
-# }
 
 defmodule EView.MetaView do
   @moduledoc """
@@ -141,9 +165,17 @@ defmodule EView.MetaView do
 end
 
 defmodule EView.DataView do
-  # List type is specified in `meta`
+  @moduledoc """
+  This module builds common `data` structure from response data and assigns.
+  """
+
+  @doc """
+  Render new `data` object by `render/2` assigns and data that will be sent to API consumer.
+
+  For objects it will assign `data`.`type` property based on module name that defines your view.
+  You can put `type` property to `data` to override this behavior.
+  """
   def render(data, _assigns) when is_list(data), do: data
-  # If developer passed his type, we will not override it
   def render(%{type: _} = data, _assigns), do: data
 
   def render(data, assigns) when is_map(data) do
@@ -171,10 +203,20 @@ defmodule EView.DataView do
 end
 
 defmodule EView.ErrorView do
+  @moduledoc """
+  This module builds common `error` structure from response data and assigns.
+  It should be used whenever you want to notify API consumer about error.
+  """
+
   # TODO: traverse changeset and ex_json_schema validation errors
 
+  @doc """
+  Renders error view.
+
+  Also it can traverse `Ecto.Changeset` and `ex_json_schema` validation errors,
+  so they will match our response format.
+  """
   def render(error) do
     error
   end
 end
-
