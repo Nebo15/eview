@@ -179,7 +179,6 @@ defmodule EViewAcceptanceTest do
         "type" => "not_found"
       }
     } = post!("not_found", %{
-      status: 422,
       data: %{
         type: "invalid_data",
       }
@@ -189,6 +188,29 @@ defmodule EViewAcceptanceTest do
     |> refute_key(:paging)
     |> refute_key(:sandbox)
   end
+
+  test "renders 500 error" do
+    assert %{
+      "meta" => %{
+        "code" => 500,
+        "type" => "object",
+        "url" => "http://localhost:4001/page"
+      },
+      "error" => %{
+        "type" => "internal_error"
+      }
+    } = post!("page", %{
+      data: %{
+        type: "invalid_data",
+      },
+      status: "not_boolean"
+    })
+    |> get_body
+    |> refute_key(:urgent)
+    |> refute_key(:paging)
+    |> refute_key(:sandbox)
+  end
+
 
   defp get_body(map) do
     map
@@ -201,18 +223,3 @@ defmodule EViewAcceptanceTest do
     map
   end
 end
-
-
-
-
-
-
-    # %{body: body} = get!("page") |> IO.inspect
-
-    # body
-    # |> Poison.decode!
-    # |> IO.inspect
-
-    # # assert body == ~S({"page":{"detail":"This is page."}})
-
-    # :timer.sleep(100)

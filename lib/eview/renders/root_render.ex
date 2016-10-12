@@ -1,86 +1,37 @@
-# TODO: idempotency_key plug that will receive header and set it back to `conn`
 # TODO: pagination
 # TODO: move acceptance case to this module (with helpers that validate structure and makes easy to extract data)
 
-defmodule EView do
+defmodule EView.RootRender do
   @moduledoc """
   This module defines common helpers and macros that should be used in views of your API app.
-
-  # Example:
-      defmodule Demo.PageView do
-        use Demo.Web, :view
-        use EView
-
-        view("page.json", %{data: data}) do
-          data
-        end
-      end
 
   Also you want to don't forget to set errors view in your Phoenix application:
 
       config :demo, Demo.Endpoint,
-        render_errors: [view: EView]
+        render_errors: [view: EView.ErrorRenderer]
   """
-  alias EView.{MetaView, ErrorView, DataView}
+  alias EView.{MetaRender, ErrorRender, DataRender}
 
   @data_type_object "object"
   @data_type_list "list"
-
-  defmacro __using__(:error) do
-    quote location: :keep do
-      import EView
-
-      view("404.json", _assigns) do
-        %{type: :not_found}
-      end
-
-      view("500.json", _assigns) do
-        %{type: :internal_error}
-      end
-
-      def template_not_found(_template, assigns) do
-        render "500.json", assigns
-      end
-    end
-  end
-
-  defmacro __using__(_) do
-    quote location: :keep do
-      import EView
-    end
-  end
-
-  @doc """
-  Define a render that will mutate its result into defined `meta`-`data` view structure.
-  """
-  defmacro defview(name, assigns, do: block) do
-    function_name = String.to_atom("render")
-    quote do
-      # TODO: maybe get object name from render name instead of view module?
-      def unquote(function_name)(unquote(name), unquote(assigns) = all_assigns) do
-        unquote(block)
-        |> apply_format(all_assigns)
-      end
-    end
-  end
 
   # TODO: modelview
   # TODO: errorview
   # TODO: add default 500 error
 
   # HTTP 4XX, 5XX status codes - Error Response
-  def apply_format(data, %{status: status} = assigns) when 400 <= status and status < 600 do
+  def render(error, %{status: status} = conn) when 400 <= status and status < 600 do
     %{
-      meta: MetaView.render(@data_type_object, assigns),
-      error: ErrorView.render(data)
+      meta: MetaRender.render(@data_type_object, conn),
+      error: ErrorRender.render(error)
     }
   end
 
   # HTTP 2XX, 3XX and all other status codes - Success Response
-  def apply_format(data, assigns) do
+  def render(data, %{assigns: assigns} = conn) do
     %{
-      meta: MetaView.render(get_data_type(data), assigns),
-      data: DataView.render(data, assigns)
+      meta: MetaRender.render(get_data_type(data), conn),
+      data: DataRender.render(data, conn)
     }
     |> put_paging(assigns)
     |> put_urgent(assigns)

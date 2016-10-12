@@ -4,9 +4,8 @@ defmodule Demo.PageView do
   """
 
   use Demo.Web, :view
-  use EView
 
-  defview("page.json", %{data: data}) do
+  def render("page.json", %{data: data}) do
     data
   end
 end

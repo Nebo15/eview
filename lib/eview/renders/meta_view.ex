@@ -1,4 +1,4 @@
-defmodule EView.MetaView do
+defmodule EView.MetaRender do
   @moduledoc """
   This module builds common `meta` structure from response data and assigns.
   """
@@ -7,14 +7,14 @@ defmodule EView.MetaView do
   @doc """
   Render new `meta` object by `render/2` assigns and data that will be sent to API consumer.
   """
-  def render(data_type, %{conn: conn}) do
+  def render(data_type, conn) do
     %{
       url: get_url(conn),
       type: data_type,
       code: get_http_status(conn),
       request_id: get_request_id(conn)
     }
-    |> add_impotency_key(conn)
+    |> put_impotency_key(conn)
   end
 
   defp get_url(%Plug.Conn{scheme: scheme, host: host, port: 80, path_info: path_info}) do
@@ -34,8 +34,8 @@ defmodule EView.MetaView do
     |> List.first
   end
 
-  defp add_impotency_key(meta, %Plug.Conn{} = conn) do
-    case get_req_header(conn, "x-idempotency-key") do
+  defp put_impotency_key(meta, %Plug.Conn{} = conn) do
+    case get_resp_header(conn, "x-idempotency-key") do
       [idempotency_key | _] ->
         meta
         |> Map.put(:idempotency_key, idempotency_key)

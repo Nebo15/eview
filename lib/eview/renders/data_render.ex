@@ -1,6 +1,6 @@
-defmodule EView.DataView do
+defmodule EView.DataRender do
   @moduledoc """
-  This module builds common `data` structure from response data and assigns.
+  This module builds common `data` structure from response data and connection details.
   """
 
   @doc """
@@ -9,15 +9,15 @@ defmodule EView.DataView do
   For objects it will assign `data`.`type` property based on module name that defines your view.
   You can put `type` property to `data` to override this behavior.
   """
-  def render(data, _assigns) when is_list(data), do: data
-  def render(%{type: _} = data, _assigns), do: data
+  def render(data, _conn) when is_list(data), do: data
+  def render(%{type: _} = data, _conn), do: data
 
-  def render(data, assigns) when is_map(data) do
+  def render(data, conn) when is_map(data) do
     data
-    |> add_object_name(assigns)
+    |> add_object_name(conn)
   end
 
-  defp add_object_name(data, %{view_module: view_module}) do
+  defp add_object_name(data, %{private: %{phoenix_view: view_module}}) do
     data
     |> Map.put_new(:type, extract_object_name(view_module))
   end

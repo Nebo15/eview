@@ -1,4 +1,4 @@
-defmodule EView.ErrorView do
+defmodule EView.ErrorRender do
   @moduledoc """
   This module builds common `error` structure from response data and assigns.
   It should be used whenever you want to notify API consumer about error.

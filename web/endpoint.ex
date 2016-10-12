@@ -11,6 +11,9 @@ defmodule Demo.Endpoint do
     plug Phoenix.CodeReloader
   end
 
+  plug EView
+  plug EView.IdempotencyPlug
+
   plug Plug.RequestId
   plug Plug.Logger
 
