@@ -20,6 +20,6 @@ defmodule Demo.Router do
   scope "/", Demo do
     pipe_through :api
 
-    get "/page", PageController, :index
+    post "/page", PageController, :create
   end
 end

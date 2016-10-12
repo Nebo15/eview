@@ -23,16 +23,12 @@ defmodule EView.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger, :plug,
-
-                    :ecto, :postgrex, :cowboy, :httpoison,
-                    :poison, :phoenix, :timex, :jvalid, :timex_ecto,
-                    :phoenix_ecto]]
+    [applications: [:logger, :plug]]
   end
 
   # Specifies which paths to compile per environment.
-  defp elixirc_paths(:test), do: ["lib", "web", "test/support", "demo"]
-  defp elixirc_paths(_),     do: ["lib", "web", "demo"]
+  defp elixirc_paths(:test), do: ["lib", "web", "test/support"]
+  defp elixirc_paths(_),     do: ["lib", "web"]
 
   # Dependencies can be Hex packages:
   #
@@ -48,16 +44,17 @@ defmodule EView.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    [{:ecto, "2.1.0-rc.2", override: true}, # TODO: Update when Ecto will release v2.1
-     {:postgrex, "~> 0.12"},
-     {:cowboy, "~> 1.0"},
-     {:httpoison, "~> 0.9.2"},
-     {:poison, "~> 3.0", override: true},
-     {:phoenix, "~> 1.2"},
-     {:jvalid, "~> 0.3.0"},
-     {:timex, "~> 3.0"},
-     {:timex_ecto, "~> 3.0"},
-     {:phoenix_ecto, "3.1.0-rc.0"}, # TODO: Update when Ecto will release v2.1
+    [{:plug, "~> 1.2"},
+     {:ecto, "2.1.0-rc.2", override: true, only: [:dev, :test]}, # TODO: Update when Ecto will release v2.1
+     {:postgrex, "~> 0.12", only: [:dev, :test]},
+     {:cowboy, "~> 1.0", only: [:dev, :test]},
+     {:httpoison, "~> 0.9.2", only: [:dev, :test]},
+     {:poison, "~> 3.0", override: true, only: [:dev, :test]},
+     {:phoenix, "~> 1.2", only: [:dev, :test]},
+     {:jvalid, "~> 0.3.0", only: [:dev, :test]},
+     {:timex, "~> 3.0", only: [:dev, :test]},
+     {:timex_ecto, "~> 3.0", only: [:dev, :test]},
+     {:phoenix_ecto, "3.1.0-rc.0", only: [:dev, :test]}, # TODO: Update when Ecto will release v2.1
      {:ex_doc, ">= 0.0.0", only: [:dev, :test]},
      {:excoveralls, "~> 0.5", only: [:dev, :test]},
      {:dogma, "> 0.1.0", only: [:dev, :test]},

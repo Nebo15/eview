@@ -4,27 +4,21 @@ defmodule Demo.PageController do
   """
 
   use Demo.Web, :controller
-  # use EView, :controller
 
-  def index(conn, _params) do
-    # dat = %Demo.SampleSchema{originator: "hello", loans_count: 123}
+  def create(conn, params) do
+    params
+    |> Map.get("env", "prod")
+    |> String.to_atom
+    |> Mix.env
 
     conn
-    |> put_status(200)
-    |> render("page.json", %{
-      data: %{
-        hello: "Bob",
-      },
-      paging: %{
-        limit: 50,
-        cursors: %{
-          starting_after: "MTAxNTExOTQ1MjAwNzI5NDE=",
-          ending_before: "NDMyNzQyODI3OTQw"
-        },
-        has_more: true
-      },
-      sandbox: %{otp_code: "123"},
-      urgent: %{balance: 300}
-    })
+    |> put_status(Map.get(params, "status", 200))
+    |> render("page.json", map_keys_to_atom(params))
   end
+
+  defp map_keys_to_atom(map) when is_map(map) do
+    for {key, val} <- map, into: %{}, do: {String.to_atom(key), map_keys_to_atom(val)}
+  end
+
+  defp map_keys_to_atom(any), do: any
 end

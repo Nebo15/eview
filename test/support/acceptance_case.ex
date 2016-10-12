@@ -28,7 +28,21 @@ defmodule EView.AcceptanceCase do
       end
 
       defp process_request_headers(headers) do
-        headers ++ [{"x-request-id", "my_request_id_000000"}, {"X-Idempotency-Key", "TestIdempotencyKey"}]
+        headers ++ [
+          {"x-request-id", "my_request_id_000000"},
+          {"x-idempotency-key", "TestIdempotencyKey"},
+          {"content-type", "application/json"}
+        ]
+      end
+
+      defp process_request_body(body) do
+        body
+        |> Poison.encode!
+      end
+
+      defp process_response_body(body) do
+        body
+        |> Poison.decode!
       end
     end
   end

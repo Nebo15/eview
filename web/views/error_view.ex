@@ -4,6 +4,7 @@ defmodule Demo.ErrorView do
   """
 
   use Demo.Web, :view
+  use EView, :error_view
 
   def render("404.json", _assigns) do
     render_error(404, "Page not found")
