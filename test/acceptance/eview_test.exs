@@ -43,13 +43,13 @@ defmodule EViewAcceptanceTest do
   test "meta code is http status" do
     assert %{
       "meta" => %{
-        "code" => 422
+        "code" => 401
       }
     } = post!("page", %{
       data: %{
         hello: "Bob",
       },
-      status: 422
+      status: 401
     })
     |> get_body
     |> refute_key(:urgent)
@@ -211,6 +211,46 @@ defmodule EViewAcceptanceTest do
     |> refute_key(:sandbox)
   end
 
+  test "renders validation errors" do
+    assert %{
+      "meta" => %{
+        "code" => 422,
+        "type" => "object",
+        "url" => "http://localhost:4001/page_via_schema"
+      },
+      "error" => %{
+        "invalid" => [
+          %{
+            "entry" => "#/loans_count",
+            "entry_type" => "json_data_proprty",
+            "rules" => [
+              %{"rule" => "required"}
+            ]
+          },
+          %{
+            "entry" => "#/originator",
+            "entry_type" => "json_data_proprty",
+            "rules" => [
+              %{
+                "rule" => "required"
+              }
+            ]
+          }
+        ],
+        "message" => "Validation failed. You can find validators description at our API Manifest: http://docs.apimanifest.apiary.io/#introduction/interacting-with-api/errors.",
+        "type" => "validation_failed"
+      }
+    } = post!("page_via_schema", %{
+      data: %{
+        type: "invalid_data",
+      },
+      status: "not_boolean"
+    })
+    |> get_body
+    |> refute_key(:urgent)
+    |> refute_key(:paging)
+    |> refute_key(:sandbox)
+  end
 
   defp get_body(map) do
     map

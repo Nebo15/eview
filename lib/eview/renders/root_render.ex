@@ -1,25 +1,20 @@
-# TODO: pagination
-# TODO: move acceptance case to this module (with helpers that validate structure and makes easy to extract data)
-
 defmodule EView.RootRender do
   @moduledoc """
-  This module defines common helpers and macros that should be used in views of your API app.
-
-  Also you want to don't forget to set errors view in your Phoenix application:
-
-      config :demo, Demo.Endpoint,
-        render_errors: [view: EView.ErrorRenderer]
+  This module converts map to a structure that corresponds
+  to [Nebo #15 API Manifest](http://docs.apimanifest.apiary.io/) response structure.
   """
   alias EView.{MetaRender, ErrorRender, DataRender}
 
   @data_type_object "object"
   @data_type_list "list"
 
-  # TODO: modelview
-  # TODO: errorview
-  # TODO: add default 500 error
+  @doc """
+  Render response object or error description following to our guidelines.
 
-  # HTTP 4XX, 5XX status codes - Error Response
+  This method will look into status code and:
+    * create `error` property from response data when HTTP status code is `4XX` or `5XX`;
+    * create `data` property for other HTTP status codes.
+  """
   def render(error, %{status: status} = conn) when 400 <= status and status < 600 do
     %{
       meta: MetaRender.render(@data_type_object, conn),
@@ -27,7 +22,6 @@ defmodule EView.RootRender do
     }
   end
 
-  # HTTP 2XX, 3XX and all other status codes - Success Response
   def render(data, %{assigns: assigns} = conn) do
     %{
       meta: MetaRender.render(get_data_type(data), conn),

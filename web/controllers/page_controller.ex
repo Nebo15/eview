@@ -4,6 +4,7 @@ defmodule Demo.PageController do
   """
 
   use Demo.Web, :controller
+  alias Demo.SampleSchema
 
   def create(conn, params) do
     params
@@ -15,6 +16,22 @@ defmodule Demo.PageController do
     |> put_status(Map.get(params, "status", 200))
     |> put_test_assignes(map_keys_to_atom(params))
     |> render("page.json", map_keys_to_atom(params))
+  end
+
+  def validate_schema(conn, params) do
+    changeset = %SampleSchema{}
+    |> SampleSchema.changeset(params)
+
+    case changeset.valid? do
+      true ->
+        conn
+        |> put_status(200)
+        |> render("page.json", map_keys_to_atom(params))
+      _ ->
+        conn
+        |> put_status(422)
+        |> render(EView.ValidationErrorView, "422.json", changeset)
+    end
   end
 
   defp put_test_assignes(conn, params) do

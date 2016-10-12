@@ -1,13 +1,13 @@
 defmodule EView.DataRender do
   @moduledoc """
-  This module builds common `data` structure from response data and connection details.
+  This module renders `data` property from response structure.
   """
 
   @doc """
-  Render new `data` object by `render/2` assigns and data that will be sent to API consumer.
+  Render new `data` property for API response.
 
-  For objects it will assign `data`.`type` property based on module name that defines your view.
-  You can put `type` property to `data` to override this behavior.
+  For objects it will assign `data.type` property based on module name that defines your view.
+  You can put `type` property to your response body to override this behavior.
   """
   def render(data, _conn) when is_list(data), do: data
   def render(%{type: _} = data, _conn), do: data

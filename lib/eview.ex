@@ -25,3 +25,5 @@ defmodule EView do
     %{conn | resp_body: resp}
   end
 end
+
+# TODO: validate headers and other non-json fields

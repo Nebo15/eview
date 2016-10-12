@@ -1,11 +1,11 @@
 defmodule EView.MetaRender do
   @moduledoc """
-  This module builds common `meta` structure from response data and assigns.
+  This module renders `meta` property from response structure.
   """
   import Plug.Conn
 
   @doc """
-  Render new `meta` object by `render/2` assigns and data that will be sent to API consumer.
+  Renders `meta` view by data_type (may be `object` or `list`) and connection `conn`.
   """
   def render(data_type, conn) do
     %{
