@@ -23,8 +23,8 @@ defmodule EView.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger, :plug],
-     included_applications: [:ecto, :ex_json_schema]]
+    [applications: [:logger],
+     included_applications: [:ecto, :poison, :plug]]
   end
 
   # Specifies which paths to compile per environment.
@@ -46,8 +46,8 @@ defmodule EView.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [{:plug, "~> 1.2"},
-     {:poison, "~> 3.0", override: true},
-     {:ecto, "2.1.0-rc.2", override: true}, # TODO: Update when Ecto will release v2.1
+     {:poison, "~> 2.0"},
+     {:ecto, "2.1.0-rc.2"}, # TODO: Update when Ecto will release v2.1
      {:ex_json_schema, "~> 0.5.1", only: [:dev, :test]},
      {:postgrex, "~> 0.12", only: [:dev, :test]},
      {:cowboy, "~> 1.0", only: [:dev, :test]},
