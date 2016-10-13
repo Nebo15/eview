@@ -1,4 +1,8 @@
 defmodule Demo do
+  @moduledoc """
+  Entrypoint of Demo application. It's only used in EView tests and as demo use-case.
+  """
+
   def start do
     import Supervisor.Spec, warn: false
 

@@ -15,7 +15,8 @@ defmodule EViewAcceptanceTest do
         "type" => "page",
         "hello" => "Bob"
       }
-    } = post!("page", %{
+    } = "page"
+    |> post!(%{
       data: %{
         hello: "Bob",
       }
@@ -31,7 +32,8 @@ defmodule EViewAcceptanceTest do
       "data" => %{
         "type" => "mytype"
       },
-    } = post!("page", %{
+    } = "page"
+    |> post!(%{
       data: %{
         type: "mytype",
         hello: "Bob"
@@ -45,7 +47,8 @@ defmodule EViewAcceptanceTest do
       "meta" => %{
         "code" => 401
       }
-    } = post!("page", %{
+    } = "page"
+    |> post!(%{
       data: %{
         hello: "Bob",
       },
@@ -58,7 +61,8 @@ defmodule EViewAcceptanceTest do
   end
 
   test "skips paging for objects" do
-    post!("page", %{
+    "page"
+    |> post!(%{
       data: %{
         hello: "Bob",
       },
@@ -80,7 +84,8 @@ defmodule EViewAcceptanceTest do
       "sandbox" => %{
         "otp_code" => "123"
       },
-    } = post!("page", %{
+    } = "page"
+    |> post!(%{
       data: %{
         hello: "Bob",
       },
@@ -91,7 +96,8 @@ defmodule EViewAcceptanceTest do
     })
     |> get_body
 
-    post!("page", %{
+    "page"
+    |> post!(%{
       data: %{
         hello: "Bob",
       },
@@ -109,7 +115,8 @@ defmodule EViewAcceptanceTest do
       "urgent" => %{
         "balance" => 100
       },
-    } = post!("page", %{
+    } = "page"
+    |> post!(%{
       data: %{
         hello: "Bob",
       },
@@ -133,7 +140,8 @@ defmodule EViewAcceptanceTest do
       "data" => [%{
         "hello" => "Bob"
       }]
-    } = post!("page", %{
+    } = "page"
+    |> post!(%{
       data: [%{
         hello: "Bob",
       }]
@@ -156,7 +164,8 @@ defmodule EViewAcceptanceTest do
       "error" => %{
         "type" => "invalid_data"
       }
-    } = post!("page", %{
+    } = "page"
+    |> post!(%{
       status: 422,
       data: %{
         type: "invalid_data",
@@ -178,7 +187,8 @@ defmodule EViewAcceptanceTest do
       "error" => %{
         "type" => "not_found"
       }
-    } = post!("not_found", %{
+    } = "not_found"
+    |> post!(%{
       data: %{
         type: "invalid_data",
       }
@@ -199,7 +209,8 @@ defmodule EViewAcceptanceTest do
       "error" => %{
         "type" => "internal_error"
       }
-    } = post!("page", %{
+    } = "page"
+    |> post!(%{
       data: %{
         type: "invalid_data",
       },
@@ -229,7 +240,8 @@ defmodule EViewAcceptanceTest do
                      "http://docs.apimanifest.apiary.io/#introduction/interacting-with-api/content-type.",
         "type" => "content_type_invalid"
       }
-    } = post!("page", %{
+    } = "page"
+    |> post!(%{
       data: %{
         type: "invalid_data",
       }
@@ -270,7 +282,8 @@ defmodule EViewAcceptanceTest do
                      "http://docs.apimanifest.apiary.io/#introduction/interacting-with-api/errors.",
         "type" => "validation_failed"
       }
-    } = post!("page_via_changeset", %{
+    } = "page_via_changeset"
+    |> post!(%{
       data: %{
         type: "invalid_data",
       },
@@ -295,7 +308,7 @@ defmodule EViewAcceptanceTest do
             "entry" => "#/originator",
             "entry_type" => "json_data_proprty",
             "rules" => [
-              %{"rule" => "Value \"me\" is not allowed in enum."}
+              %{"rule" => ~S(Value "me" is not allowed in enum.)}
             ]
           }
         ],
@@ -303,7 +316,8 @@ defmodule EViewAcceptanceTest do
                      "http://docs.apimanifest.apiary.io/#introduction/interacting-with-api/errors.",
         "type" => "validation_failed"
       }
-    } = post!("page_via_schema", %{
+    } = "page_via_schema"
+    |> post!(%{
       data: %{
         originator: "me",
       },

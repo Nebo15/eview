@@ -1,4 +1,11 @@
 defmodule EView.ErrorView do
+  @moduledoc """
+  Error view that can be used in Phoenix:
+
+      config :myapp, MyApp.Endpoint,
+        render_errors: [view: EView.ErrorView, accepts: ~w(json)]
+  """
+
   @doc """
   This render will be used by-default for non-existent routes. You can use it in your controller:
 

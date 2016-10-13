@@ -1,11 +1,16 @@
 defmodule EView.ValidationErrorView do
+  @moduledoc """
+  This module provides renders that can be used whenever you want to show validation error.
+  """
+
   @doc """
   Use this render template whenever you want to return validation error. Currently is supports:
     * `Ecto.Changeset` errors (you can pass Schema that failed validation or changeset by itself);
     * `ex_json_schema` validation errors.
   """
   def render("422.json", %Ecto.Changeset{errors: _errors} = changeset) do
-    errors = Ecto.Changeset.traverse_errors(changeset, fn
+    errors = changeset
+    |> Ecto.Changeset.traverse_errors(fn
       err -> render_changeset_error(err)
     end)
     |> Enum.map(&render_changeset_validation_element/1)
