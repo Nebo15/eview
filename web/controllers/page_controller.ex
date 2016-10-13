@@ -18,7 +18,7 @@ defmodule Demo.PageController do
     |> render("page.json", map_keys_to_atom(params))
   end
 
-  def validate_schema(conn, params) do
+  def validate_changeset(conn, params) do
     changeset = %SampleSchema{}
     |> SampleSchema.changeset(params)
 
@@ -31,6 +31,38 @@ defmodule Demo.PageController do
         conn
         |> put_status(422)
         |> render(EView.ValidationErrorView, "422.json", changeset)
+    end
+  end
+
+  def validate_schema(conn, params) do
+    schema = %{
+      "type" => "object",
+      "properties" => %{
+        "originator" => %{
+          "type" => "string",
+          "enum" => ["a", "b"]
+        },
+        "loans_count" => %{
+          "type" => "integer"
+        }
+      },
+      "required": ["originator", "loans_count"],
+      "additionalProperties": false
+    }
+
+    validation = schema
+    |> ExJsonSchema.Schema.resolve
+    |> ExJsonSchema.Validator.validate(params["data"])
+
+    case validation do
+      :ok ->
+        conn
+        |> put_status(200)
+        |> render("page.json", map_keys_to_atom(params))
+      {:error, err} ->
+        conn
+        |> put_status(422)
+        |> render(EView.ValidationErrorView, "422.json", %{errors: err})
     end
   end
 

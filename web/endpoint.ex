@@ -19,7 +19,7 @@ defmodule Demo.Endpoint do
 
   plug Plug.Parsers,
     parsers: [:urlencoded, :multipart, :json],
-    pass: ["*/*"],
+    pass: ["application/json"],
     json_decoder: Poison
 
   plug Plug.MethodOverride

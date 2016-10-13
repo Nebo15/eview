@@ -28,11 +28,11 @@ defmodule EView.AcceptanceCase do
       end
 
       defp process_request_headers(headers) do
-        headers ++ [
+        [
           {"x-request-id", "my_request_id_000000"},
           {"x-idempotency-key", "TestIdempotencyKey"},
-          {"content-type", "application/json"}
-        ]
+          {"content-type", "application/json"},
+        ] ++ headers
       end
 
       defp process_request_body(body) do

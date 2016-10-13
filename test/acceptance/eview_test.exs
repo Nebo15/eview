@@ -211,12 +211,41 @@ defmodule EViewAcceptanceTest do
     |> refute_key(:sandbox)
   end
 
-  test "renders validation errors" do
+  test "renders invalid content-type error" do
+    assert %{
+      "meta" => %{
+        "code" => 415,
+        "type" => "object",
+        "url" => "http://localhost:4001/page"
+      },
+      "error" => %{
+        "invalid" => [
+          %{
+            "entry_type" => "header",
+            "entry" => "Content-Type"
+          }
+        ],
+        "message" => "Invalid Content-Type header. Try to set 'Content-Type: application/json' header: " <>
+                     "http://docs.apimanifest.apiary.io/#introduction/interacting-with-api/content-type.",
+        "type" => "content_type_invalid"
+      }
+    } = post!("page", %{
+      data: %{
+        type: "invalid_data",
+      }
+    }, [{"content-type", "application/unknown"}])
+    |> get_body
+    |> refute_key(:urgent)
+    |> refute_key(:paging)
+    |> refute_key(:sandbox)
+  end
+
+  test "renders changeset validation errors" do
     assert %{
       "meta" => %{
         "code" => 422,
         "type" => "object",
-        "url" => "http://localhost:4001/page_via_schema"
+        "url" => "http://localhost:4001/page_via_changeset"
       },
       "error" => %{
         "invalid" => [
@@ -237,12 +266,46 @@ defmodule EViewAcceptanceTest do
             ]
           }
         ],
-        "message" => "Validation failed. You can find validators description at our API Manifest: http://docs.apimanifest.apiary.io/#introduction/interacting-with-api/errors.",
+        "message" => "Validation failed. You can find validators description at our API Manifest: " <>
+                     "http://docs.apimanifest.apiary.io/#introduction/interacting-with-api/errors.",
+        "type" => "validation_failed"
+      }
+    } = post!("page_via_changeset", %{
+      data: %{
+        type: "invalid_data",
+      },
+      status: "not_boolean"
+    })
+    |> get_body
+    |> refute_key(:urgent)
+    |> refute_key(:paging)
+    |> refute_key(:sandbox)
+  end
+
+  test "renders json schema validation errors" do
+    assert %{
+      "meta" => %{
+        "code" => 422,
+        "type" => "object",
+        "url" => "http://localhost:4001/page_via_schema"
+      },
+      "error" => %{
+        "invalid" => [
+          %{
+            "entry" => "#/originator",
+            "entry_type" => "json_data_proprty",
+            "rules" => [
+              %{"rule" => "Value \"me\" is not allowed in enum."}
+            ]
+          }
+        ],
+        "message" => "Validation failed. You can find validators description at our API Manifest: " <>
+                     "http://docs.apimanifest.apiary.io/#introduction/interacting-with-api/errors.",
         "type" => "validation_failed"
       }
     } = post!("page_via_schema", %{
       data: %{
-        type: "invalid_data",
+        originator: "me",
       },
       status: "not_boolean"
     })

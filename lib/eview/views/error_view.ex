@@ -24,4 +24,48 @@ defmodule EView.ErrorView do
   def render("500.json", _assigns) do
     %{type: :internal_error}
   end
+
+  def render("415.json", assigns) do
+    # This bitch don't want to handle before_send
+    %{
+      type: :content_type_invalid,
+      invalid: [%{
+        entry_type: :header,
+        entry: "Content-Type"
+      }],
+      message: "Invalid Content-Type header. Try to set 'Content-Type: application/json' header: " <>
+               "http://docs.apimanifest.apiary.io/#introduction/interacting-with-api/content-type."
+    }
+    |> EView.RootRender.render(assigns[:conn])
+  end
+
+  def render("413.json", assigns) do
+    # This bitch don't want to handle before_send
+    %{
+      type: :request_too_large,
+      invalid: [%{
+        entry_type: :request,
+        rules: [
+          %{rule: :size}
+        ]
+      }],
+      message: "Request body is too large."
+    }
+    |> EView.RootRender.render(assigns[:conn])
+  end
+
+  def render("400.json", assigns) do
+    # This bitch don't want to handle before_send
+    %{
+      type: :request_malformed,
+      invalid: [%{
+        entry_type: :request,
+        rules: [
+          %{rule: :json}
+        ]
+      }],
+      message: "Malformed request. Probably, you have sent corrupted JSON."
+    }
+    |> EView.RootRender.render(assigns[:conn])
+  end
 end
