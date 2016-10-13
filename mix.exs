@@ -5,7 +5,7 @@ defmodule EView.Mixfile do
 
   def project do
     [app: :eview,
-     description: "Add description to your package.",
+     description: "Plug that converts response to Nebo #15 API spec format.",
      package: package,
      version: @version,
      elixir: "~> 1.3",
@@ -48,7 +48,7 @@ defmodule EView.Mixfile do
     [{:plug, "~> 1.2"},
      {:poison, "~> 3.0", override: true},
      {:ecto, "2.1.0-rc.2", override: true}, # TODO: Update when Ecto will release v2.1
-     {:ex_json_schema, "~> 0.5.1"},
+     {:ex_json_schema, "~> 0.5.1", [:dev, :test]},
      {:postgrex, "~> 0.12", only: [:dev, :test]},
      {:cowboy, "~> 1.0", only: [:dev, :test]},
      {:httpoison, "~> 0.9.2", only: [:dev, :test]},
