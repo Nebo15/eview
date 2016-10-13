@@ -1,6 +1,22 @@
 defmodule EView.ValidationErrorView do
   @moduledoc """
   This module provides renders that can be used whenever you want to show validation error.
+
+  # Example:
+
+      changeset = %SampleSchema{}
+      |> SampleSchema.changeset(params)
+
+      case changeset.valid? do
+        true ->
+          conn
+          |> put_status(200)
+          |> render("page.json", map_keys_to_atom(params))
+        _ ->
+          conn
+          |> put_status(422)
+          |> render(EView.ValidationErrorView, "422.json", changeset)
+      end
   """
 
   @doc """

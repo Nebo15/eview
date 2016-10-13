@@ -1,7 +1,5 @@
 defmodule Demo.Endpoint do
-  @moduledoc """
-  Phoenix Endpoint for demo_api application.
-  """
+  @moduledoc false
 
   use Phoenix.Endpoint, otp_app: :eview
 

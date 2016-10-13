@@ -2,6 +2,14 @@ defmodule EView do
   @moduledoc """
   This plug will take `body_params` from Plug.Conn structure
   and re-render it with appropriate structure to `resp_body`.
+
+  What is appropriate structure? Take look at [Nebo #15 API Manifest](http://docs.apimanifest.apiary.io/#).
+
+  # Example:
+  Add to your `endpoint.ex` before Plug.Parsers plug:
+
+        plug EView
+        plug EView.IdempotencyPlug
   """
 
   @behaviour Plug

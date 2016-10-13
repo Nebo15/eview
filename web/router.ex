@@ -1,11 +1,5 @@
 defmodule Demo.Router do
-  @moduledoc """
-  The router provides a set of macros for generating routes
-  that dispatch to specific controllers and actions.
-  Those macros are named after HTTP verbs.
-
-  More info at: https://hexdocs.pm/phoenix/Phoenix.Router.html
-  """
+  @moduledoc false
 
   use Demo.Web, :router
 

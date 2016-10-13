@@ -1,7 +1,5 @@
 defmodule Demo.PageController do
-  @moduledoc """
-  Sample controller for generated application.
-  """
+  @moduledoc false
 
   use Demo.Web, :controller
   alias Demo.SampleSchema

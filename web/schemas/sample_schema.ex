@@ -1,7 +1,5 @@
 defmodule Demo.SampleSchema do
-  @moduledoc """
-  Validator for loans requests
-  """
+  @moduledoc false
   use Ecto.Schema
   import Ecto.Changeset
 

@@ -1,7 +1,5 @@
 defmodule Demo.PageView do
-  @moduledoc """
-  Sample view for Pages controller.
-  """
+  @moduledoc false
 
   use Demo.Web, :view
 
