@@ -47,7 +47,7 @@ defmodule EView.Mixfile do
   defp deps do
     [{:plug, "~> 1.2"},
      {:poison, "~> 2.0"},
-     {:ecto, "2.1.0-rc.2", optional: true}, # TODO: Update when Ecto will release v2.1
+     {:ecto, github: "elixir-ecto/ecto", optional: true, override: true}, # TODO: Update when Ecto will release v2.1
      {:credit_card, "~> 1.0", optional: true},
      {:ex_json_schema, "~> 0.5.1", only: [:dev, :test]},
      {:postgrex, "~> 0.12", only: [:dev, :test]},

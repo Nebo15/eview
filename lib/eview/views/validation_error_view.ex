@@ -18,6 +18,7 @@ defmodule EView.ValidationErrorView do
           |> render(EView.ValidationErrorView, "422.json", changeset)
       end
   """
+  import EView.Helpers.ChangesetValidationsParser
 
   @doc """
   Use this render template whenever you want to return validation error. Currently is supports:
@@ -28,19 +29,10 @@ defmodule EView.ValidationErrorView do
     render("422.json", changeset)
   end
 
-  def render("422.json", %Ecto.Changeset{errors: _errors} = changeset) do
-    errors = changeset
-    |> Ecto.Changeset.traverse_errors(fn {msg, opts} ->
-        %{
-          rule: msg,
-          params: opts
-        }
-    end)
-    |> Enum.flat_map(&map_changeset_errors(&1, "#"))
-
+  def render("422.json", %Ecto.Changeset{} = changeset) do
     %{
       type: :validation_failed,
-      invalid: errors,
+      invalid: changeset_to_rules(changeset),
       message: "Validation failed. You can find validators description at our API Manifest: " <>
                "http://docs.apimanifest.apiary.io/#introduction/interacting-with-api/errors."
     }
@@ -59,35 +51,11 @@ defmodule EView.ValidationErrorView do
     }
   end
 
-  defp map_changeset_errors({field, rules}, prefix) when is_list(rules) do
-    [
-      %{
-        entry_type: "json_data_proprty",
-        entry: prefix <> "/" <> to_string(field),
-        rules: map_rule_names(rules)
-      }
-    ]
-  end
-
-  defp map_changeset_errors({field, %{} = nested_errors}, prefix) do
-    nested_errors
-    |> Enum.flat_map(&map_changeset_errors(&1, prefix <> "/" <> to_string(field)))
-  end
-
-  defp map_rule_names(rules) when is_list(rules) do
-    rules
-    |> Enum.map(fn %{params: params, rule: rule} -> %{params: params, rule: get_rule_name(rule)} end)
-  end
-
   defp map_schema_errors({rule, path}) do
     %{
       entry_type: "json_data_proprty",
       entry: path,
-      rules: [%{rule: get_rule_name(rule)}]
+      rules: [%{rule: rule}]
     }
   end
-
-  defp get_rule_name("can't be blank"), do: :required
-  defp get_rule_name("is invalid"), do: :invalid
-  defp get_rule_name(msg), do: msg
 end

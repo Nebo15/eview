@@ -268,14 +268,14 @@ defmodule EViewAcceptanceTest do
       "error" => %{
         "invalid" => [
           %{
-            "entry" => "#/loans_count",
+            "entry" => "$.loans_count",
             "entry_type" => "json_data_proprty",
             "rules" => [
               %{"rule" => "required"}
             ]
           },
           %{
-            "entry" => "#/originator",
+            "entry" => "$.originator",
             "entry_type" => "json_data_proprty",
             "rules" => [
               %{
