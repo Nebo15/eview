@@ -1,3 +1,4 @@
+# TODO: validate headers and other non-json fields
 defmodule EView do
   @moduledoc """
   This plug will take `body_params` from Plug.Conn structure
@@ -33,5 +34,3 @@ defmodule EView do
     %{conn | resp_body: resp}
   end
 end
-
-# TODO: validate headers and other non-json fields

@@ -480,13 +480,13 @@ defmodule EView.ChangesetValidationsParserTest do
     changeset =
       %{"email" => "email@example.com"}
       |> changeset()
-      |> Ecto.Changeset.EmailValidator.validate_email(:email)
+      |> EView.Changeset.EmailValidator.validate_email(:email)
     assert changeset.valid?
 
     changeset =
       %{"email" => "plainaddress"}
       |> changeset()
-      |> Ecto.Changeset.EmailValidator.validate_email(:email)
+      |> EView.Changeset.EmailValidator.validate_email(:email)
     refute changeset.valid?
 
     assert %{invalid: [
@@ -507,13 +507,13 @@ defmodule EView.ChangesetValidationsParserTest do
     changeset =
       %{"virtual" => "+380631112233"}
       |> changeset()
-      |> Ecto.Changeset.PhoneNumberValidator.validate_phone_number(:virtual)
+      |> EView.Changeset.PhoneNumberValidator.validate_phone_number(:virtual)
     assert changeset.valid?
 
     changeset =
       %{"virtual" => "not_a_number"}
       |> changeset()
-      |> Ecto.Changeset.PhoneNumberValidator.validate_phone_number(:virtual)
+      |> EView.Changeset.PhoneNumberValidator.validate_phone_number(:virtual)
     refute changeset.valid?
 
     assert %{invalid: [
@@ -534,13 +534,13 @@ defmodule EView.ChangesetValidationsParserTest do
     changeset =
       %{"virtual" => "5457000000000007"}
       |> changeset()
-      |> Ecto.Changeset.CardNumberValidator.validate_card_number(:virtual)
+      |> EView.Changeset.CardNumberValidator.validate_card_number(:virtual)
     assert changeset.valid?
 
     changeset =
       %{"virtual" => "5457000000000001"}
       |> changeset()
-      |> Ecto.Changeset.CardNumberValidator.validate_card_number(:virtual)
+      |> EView.Changeset.CardNumberValidator.validate_card_number(:virtual)
     refute changeset.valid?
 
     assert %{invalid: [
@@ -559,7 +559,7 @@ defmodule EView.ChangesetValidationsParserTest do
     changeset =
       %{"virtual" => "5457000000000001"}
       |> changeset()
-      |> Ecto.Changeset.CardNumberValidator.validate_card_number(:virtual,
+      |> EView.Changeset.CardNumberValidator.validate_card_number(:virtual,
                                     message: "is not a valid card number. We accept only: %{allowed_card_types}")
     refute changeset.valid?
 
@@ -585,13 +585,13 @@ defmodule EView.ChangesetValidationsParserTest do
         "list_key": ["a", "b", "c"]
       }}
       |> changeset()
-      |> Ecto.Changeset.MetadataValidator.validate_metadata(:metadata)
+      |> EView.Changeset.MetadataValidator.validate_metadata(:metadata)
     assert changeset.valid?
 
     changeset =
       %{"metadata" => "not_an_object"}
       |> changeset()
-      |> Ecto.Changeset.MetadataValidator.validate_metadata(:metadata)
+      |> EView.Changeset.MetadataValidator.validate_metadata(:metadata)
     refute changeset.valid?
 
     assert %{invalid: [
@@ -614,7 +614,7 @@ defmodule EView.ChangesetValidationsParserTest do
         "string_list" => ["a", String.duplicate("bar", 300)]
       }}
       |> changeset()
-      |> Ecto.Changeset.MetadataValidator.validate_metadata(:metadata)
+      |> EView.Changeset.MetadataValidator.validate_metadata(:metadata)
 
     refute changeset.valid?
 
