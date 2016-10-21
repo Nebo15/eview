@@ -121,7 +121,8 @@ defmodule EView.ChangesetValidationsParserTest do
 
   test "validate_exclusion/3" do
     changeset =
-      changeset(%{"title" => "world"})
+      %{"title" => "world"}
+      |> changeset()
       |> validate_exclusion(:title, ~w(world))
     refute changeset.valid?
 
@@ -139,7 +140,10 @@ defmodule EView.ChangesetValidationsParserTest do
   end
 
   test "validate_length/3 with string" do
-    changeset = changeset(%{"title" => "world"}) |> validate_length(:title, min: 6, max: 5, is: 3)
+    changeset =
+      %{"title" => "world"}
+      |> changeset()
+      |> validate_length(:title, min: 6, max: 5, is: 3)
     refute changeset.valid?
 
     assert %{invalid: [
@@ -154,7 +158,10 @@ defmodule EView.ChangesetValidationsParserTest do
       }
     ]} = EView.ValidationErrorView.render("422.json", changeset)
 
-    changeset = changeset(%{"title" => "world"}) |> validate_length(:title, min: 6)
+    changeset =
+      %{"title" => "world"}
+      |> changeset()
+      |> validate_length(:title, min: 6)
     refute changeset.valid?
 
     assert %{invalid: [
@@ -169,7 +176,10 @@ defmodule EView.ChangesetValidationsParserTest do
       }
     ]} = EView.ValidationErrorView.render("422.json", changeset)
 
-    changeset = changeset(%{"title" => "world"}) |> validate_length(:title, max: 4)
+    changeset =
+      %{"title" => "world"}
+      |> changeset()
+      |> validate_length(:title, max: 4)
     refute changeset.valid?
 
     assert %{invalid: [
@@ -184,7 +194,10 @@ defmodule EView.ChangesetValidationsParserTest do
       }
     ]} = EView.ValidationErrorView.render("422.json", changeset)
 
-    changeset = changeset(%{"title" => "world"}) |> validate_length(:title, is: 10)
+    changeset =
+      %{"title" => "world"}
+      |> changeset()
+      |> validate_length(:title, is: 10)
     refute changeset.valid?
 
     assert %{invalid: [
@@ -201,7 +214,10 @@ defmodule EView.ChangesetValidationsParserTest do
   end
 
   test "validate_length/3 with list" do
-    changeset = changeset(%{"topics" => ["Politics", "Security"]}) |> validate_length(:topics, min: 3, max: 3, is: 3)
+    changeset =
+      %{"topics" => ["Politics", "Security"]}
+      |> changeset()
+      |> validate_length(:topics, min: 3, max: 3, is: 3)
     refute changeset.valid?
 
     assert %{invalid: [
@@ -216,7 +232,10 @@ defmodule EView.ChangesetValidationsParserTest do
       }
     ]} = EView.ValidationErrorView.render("422.json", changeset)
 
-    changeset = changeset(%{"topics" => ["Politics", "Security"]}) |> validate_length(:topics, min: 6, foo: true)
+    changeset =
+      %{"topics" => ["Politics", "Security"]}
+      |> changeset()
+      |> validate_length(:topics, min: 6, foo: true)
     refute changeset.valid?
 
     assert %{invalid: [
@@ -231,7 +250,10 @@ defmodule EView.ChangesetValidationsParserTest do
       }
     ]} = EView.ValidationErrorView.render("422.json", changeset)
 
-    changeset = changeset(%{"topics" => ["Politics", "Security", "Economy"]}) |> validate_length(:topics, max: 2)
+    changeset =
+      %{"topics" => ["Politics", "Security", "Economy"]}
+      |> changeset()
+      |> validate_length(:topics, max: 2)
     refute changeset.valid?
 
     assert %{invalid: [
@@ -246,7 +268,10 @@ defmodule EView.ChangesetValidationsParserTest do
       }
     ]} = EView.ValidationErrorView.render("422.json", changeset)
 
-    changeset = changeset(%{"topics" => ["Politics", "Security"]}) |> validate_length(:topics, is: 10)
+    changeset =
+      %{"topics" => ["Politics", "Security"]}
+      |> changeset()
+      |> validate_length(:topics, is: 10)
     refute changeset.valid?
 
     assert %{invalid: [
@@ -264,8 +289,10 @@ defmodule EView.ChangesetValidationsParserTest do
 
   test "validate_number/3" do
     # Single error
-    changeset = changeset(%{"upvotes" => -1})
-                |> validate_number(:upvotes, greater_than: 0)
+    changeset =
+      %{"upvotes" => -1}
+      |> changeset()
+      |> validate_number(:upvotes, greater_than: 0)
     refute changeset.valid?
 
     assert %{invalid: [
@@ -281,8 +308,10 @@ defmodule EView.ChangesetValidationsParserTest do
     ]} = EView.ValidationErrorView.render("422.json", changeset)
 
     # Multiple validations with multiple errors
-    changeset = changeset(%{"upvotes" => 3})
-                |> validate_number(:upvotes, greater_than: 100, less_than: 0)
+    changeset =
+      %{"upvotes" => 3}
+      |> changeset()
+      |> validate_number(:upvotes, greater_than: 100, less_than: 0)
     refute changeset.valid?
     assert %{invalid: [
       %{
@@ -298,8 +327,10 @@ defmodule EView.ChangesetValidationsParserTest do
   end
 
   test "validate_confirmation/3" do
-    changeset = changeset(%{"title" => "title"})
-                |> validate_confirmation(:title, required: true)
+    changeset =
+      %{"title" => "title"}
+      |> changeset()
+      |> validate_confirmation(:title, required: true)
     refute changeset.valid?
 
     assert %{invalid: [
@@ -314,8 +345,10 @@ defmodule EView.ChangesetValidationsParserTest do
       }
     ]} = EView.ValidationErrorView.render("422.json", changeset)
 
-    changeset = changeset(%{"title" => "title", "title_confirmation" => nil})
-                |> validate_confirmation(:title)
+    changeset =
+      %{"title" => "title", "title_confirmation" => nil}
+      |> changeset()
+      |> validate_confirmation(:title)
     refute changeset.valid?
 
     assert %{invalid: [
@@ -330,8 +363,10 @@ defmodule EView.ChangesetValidationsParserTest do
       }
     ]} = EView.ValidationErrorView.render("422.json", changeset)
 
-    changeset = changeset(%{"title" => "title", "title_confirmation" => "not title"})
-                |> validate_confirmation(:title)
+    changeset =
+      %{"title" => "title", "title_confirmation" => "not title"}
+      |> changeset()
+      |> validate_confirmation(:title)
     refute changeset.valid?
 
     assert %{invalid: [
@@ -346,8 +381,10 @@ defmodule EView.ChangesetValidationsParserTest do
       }
     ]} = EView.ValidationErrorView.render("422.json", changeset)
 
-    changeset = changeset(%{"title" => "title", "title_confirmation" => "not title"})
-                |> validate_confirmation(:title, message: "doesn't match field below")
+    changeset =
+      %{"title" => "title", "title_confirmation" => "not title"}
+      |> changeset()
+      |> validate_confirmation(:title, message: "doesn't match field below")
     refute changeset.valid?
 
     assert %{invalid: [
@@ -363,8 +400,10 @@ defmodule EView.ChangesetValidationsParserTest do
     ]} = EView.ValidationErrorView.render("422.json", changeset)
 
     # With blank change
-    changeset = changeset(%{"password" => "", "password_confirmation" => "password"})
-                |> validate_confirmation(:password)
+    changeset =
+      %{"password" => "", "password_confirmation" => "password"}
+      |> changeset()
+      |> validate_confirmation(:password)
     refute changeset.valid?
 
     assert %{invalid: [
@@ -380,8 +419,10 @@ defmodule EView.ChangesetValidationsParserTest do
     ]} = EView.ValidationErrorView.render("422.json", changeset)
 
     # With missing change
-    changeset = changeset(%{"password_confirmation" => "password"})
-                |> validate_confirmation(:password)
+    changeset =
+      %{"password_confirmation" => "password"}
+      |> changeset()
+      |> validate_confirmation(:password)
     refute changeset.valid?
 
     assert %{invalid: [
@@ -398,8 +439,10 @@ defmodule EView.ChangesetValidationsParserTest do
   end
 
   test "validate_acceptance/3" do
-    changeset = changeset(%{"terms_of_service" => "false"})
-                |> validate_acceptance(:terms_of_service)
+    changeset =
+      %{"terms_of_service" => "false"}
+      |> changeset()
+      |> validate_acceptance(:terms_of_service)
     refute changeset.valid?
 
     assert %{invalid: [
@@ -414,7 +457,10 @@ defmodule EView.ChangesetValidationsParserTest do
       }
     ]} = EView.ValidationErrorView.render("422.json", changeset)
 
-    changeset = changeset(%{}) |> validate_acceptance(:terms_of_service, message: "must be abided")
+    changeset =
+      %{}
+      |> changeset()
+      |> validate_acceptance(:terms_of_service, message: "must be abided")
     refute changeset.valid?
 
     assert %{invalid: [
@@ -431,12 +477,14 @@ defmodule EView.ChangesetValidationsParserTest do
   end
 
   test "validate_email/3" do
-    changeset = %{"email" => "email@example.com"}
+    changeset =
+      %{"email" => "email@example.com"}
       |> changeset()
       |> Ecto.Changeset.EmailValidator.validate_email(:email)
     assert changeset.valid?
 
-    changeset = %{"email" => "plainaddress"}
+    changeset =
+      %{"email" => "plainaddress"}
       |> changeset()
       |> Ecto.Changeset.EmailValidator.validate_email(:email)
     refute changeset.valid?
@@ -456,12 +504,14 @@ defmodule EView.ChangesetValidationsParserTest do
   end
 
   test "validate_phone_number/3" do
-    changeset = %{"virtual" => "+380631112233"}
+    changeset =
+      %{"virtual" => "+380631112233"}
       |> changeset()
       |> Ecto.Changeset.PhoneNumberValidator.validate_phone_number(:virtual)
     assert changeset.valid?
 
-    changeset = %{"virtual" => "not_a_number"}
+    changeset =
+      %{"virtual" => "not_a_number"}
       |> changeset()
       |> Ecto.Changeset.PhoneNumberValidator.validate_phone_number(:virtual)
     refute changeset.valid?
@@ -481,12 +531,14 @@ defmodule EView.ChangesetValidationsParserTest do
   end
 
   test "validate_card_number/3" do
-    changeset = %{"virtual" => "5457000000000007"}
+    changeset =
+      %{"virtual" => "5457000000000007"}
       |> changeset()
       |> Ecto.Changeset.CardNumberValidator.validate_card_number(:virtual)
     assert changeset.valid?
 
-    changeset = %{"virtual" => "5457000000000001"}
+    changeset =
+      %{"virtual" => "5457000000000001"}
       |> changeset()
       |> Ecto.Changeset.CardNumberValidator.validate_card_number(:virtual)
     refute changeset.valid?
@@ -504,7 +556,8 @@ defmodule EView.ChangesetValidationsParserTest do
       }
     ]} = EView.ValidationErrorView.render("422.json", changeset)
 
-    changeset = %{"virtual" => "5457000000000001"}
+    changeset =
+      %{"virtual" => "5457000000000001"}
       |> changeset()
       |> Ecto.Changeset.CardNumberValidator.validate_card_number(:virtual,
                                     message: "is not a valid card number. We accept only: %{allowed_card_types}")
@@ -525,16 +578,18 @@ defmodule EView.ChangesetValidationsParserTest do
   end
 
   test "validate_metadata/3" do
-    changeset = %{"metadata" => %{
-      "my_key": "meta_value",
-      "int_key": 1337,
-      "list_key": ["a", "b", "c"]
+    changeset =
+      %{"metadata" => %{
+        "my_key": "meta_value",
+        "int_key": 1337,
+        "list_key": ["a", "b", "c"]
       }}
       |> changeset()
       |> Ecto.Changeset.MetadataValidator.validate_metadata(:metadata)
     assert changeset.valid?
 
-    changeset = %{"metadata" => "not_an_object"}
+    changeset =
+      %{"metadata" => "not_an_object"}
       |> changeset()
       |> Ecto.Changeset.MetadataValidator.validate_metadata(:metadata)
     refute changeset.valid?
@@ -551,14 +606,15 @@ defmodule EView.ChangesetValidationsParserTest do
       }
     ]} = EView.ValidationErrorView.render("422.json", changeset)
 
-    changeset = %{"metadata" => %{
-      "loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong_key" => "val",
-      "foo" => String.duplicate("bar", 300),
-      "list" => 1..200,
-      "string_list" => ["a", String.duplicate("bar", 300)]
-    }}
-    |> changeset()
-    |> Ecto.Changeset.MetadataValidator.validate_metadata(:metadata)
+    changeset =
+      %{"metadata" => %{
+        "lo" <> String.duplicate("o", 90) <> "ong_key" => "val",
+        "foo" => String.duplicate("bar", 300),
+        "list" => 1..200,
+        "string_list" => ["a", String.duplicate("bar", 300)]
+      }}
+      |> changeset()
+      |> Ecto.Changeset.MetadataValidator.validate_metadata(:metadata)
 
     refute changeset.valid?
 

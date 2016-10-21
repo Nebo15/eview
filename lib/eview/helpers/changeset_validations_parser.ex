@@ -1,4 +1,8 @@
 defmodule EView.Helpers.ChangesetValidationsParser do
+  @moduledoc """
+  This module converts changeset to a error structure described in API Manifest.
+  """
+
   @enty_type "json_data_proprty"
   @jsonpath_root "$"
   @jsonpath_joiner "."
@@ -64,7 +68,7 @@ defmodule EView.Helpers.ChangesetValidationsParser do
 
       # With regex pattern
       {^validation_name, %Regex{} = regex}, acc ->
-        ["#{inspect regex}" | acc]
+        [inspect(regex) | acc]
 
       # Or at least parseable
       {^validation_name, rule_description}, acc ->

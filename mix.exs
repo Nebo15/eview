@@ -49,7 +49,7 @@ defmodule EView.Mixfile do
      {:poison, "~> 2.0"},
      {:ecto, github: "elixir-ecto/ecto", optional: true, override: true}, # TODO: Update when Ecto will release v2.1
      {:credit_card, "~> 1.0", optional: true},
-     {:ex_json_schema, "~> 0.5.1", only: [:dev, :test]},
+     {:ex_json_schema, "~> 0.5.1", optional: true},
      {:postgrex, "~> 0.12", only: [:dev, :test]},
      {:cowboy, "~> 1.0", only: [:dev, :test]},
      {:httpoison, "~> 0.9.2", only: [:dev, :test]},

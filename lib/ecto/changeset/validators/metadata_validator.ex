@@ -57,19 +57,19 @@ defmodule Ecto.Changeset.MetadataValidator do
   defp field_validation_reducer(parent, {key, list}, acc) when is_list(list) do
     {errors, _} = Enum.reduce(list, {[], 0}, fn
       %Decimal{}, {el_acc, i} ->
-        {el_acc, i+1}
+        {el_acc, i + 1}
       elem, {el_acc, i} when is_float(elem) or is_number(elem) ->
-        {el_acc, i+1}
+        {el_acc, i + 1}
       elem, {el_acc, i} when is_binary(elem) and byte_size(elem) <= @max_list_value_length ->
-        {el_acc, i+1}
+        {el_acc, i + 1}
       elem, {el_acc, i} when is_binary(elem) and byte_size(elem) > @max_list_value_length ->
         {[{join_atoms(field_path(parent, key), "[#{inspect i}]"),
           {"list keys should be up to %{max} characters", [validation: :length, max: @max_key_length]}}
-        | el_acc], i+1}
+        | el_acc], i + 1}
       _, {el_acc, i} ->
         {[{field_path(parent, key),
           {"one of keys is invalid", [validation: :cast, type: [:integer, :float, :decimal, :string]]}}
-        | el_acc], i+1}
+        | el_acc], i + 1}
     end)
 
     errors ++ acc
