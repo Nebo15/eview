@@ -1,5 +1,11 @@
 defmodule EViewAcceptanceTest do
-  use EView.AcceptanceCase, async: true
+  use EView.AcceptanceCase,
+    async: true,
+    otp_app: :eview,
+    endpoint: Demo.Endpoint,
+    headers: [{"x-request-id", "my_request_id_000000"},
+              {"x-idempotency-key", "TestIdempotencyKey"}]
+
   use Plug.Test
 
   test "renders meta and data objects" do
@@ -327,11 +333,6 @@ defmodule EViewAcceptanceTest do
     |> refute_key(:urgent)
     |> refute_key(:paging)
     |> refute_key(:sandbox)
-  end
-
-  defp get_body(map) do
-    map
-    |> Map.get(:body)
   end
 
   defp refute_key(map, elem) when is_map(map) do
