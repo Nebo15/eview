@@ -608,7 +608,7 @@ defmodule EView.ChangesetValidationsParserTest do
 
     changeset =
       %{"metadata" => %{
-        "lo" <> String.duplicate("o", 90) <> "ong_key" => "val",
+        "lo" <> String.duplicate("o", 100) <> "ong_key" => "val",
         "foo" => String.duplicate("bar", 300),
         "list" => 1..200,
         "string_list" => ["a", String.duplicate("bar", 300)]
