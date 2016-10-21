@@ -87,7 +87,7 @@ defmodule Ecto.Changeset.MetadataValidator do
   end
 
   # Everything else is an error
-  defp field_validation_reducer(parent, {key, val}, acc) do
+  defp field_validation_reducer(parent, {key, _val}, acc) do
     [{field_path(parent, key),
      {"is invalid", [validation: :cast, type: [:integer, :float, :decimal, :string]]}}
     | acc]
