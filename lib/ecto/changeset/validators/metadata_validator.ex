@@ -63,7 +63,7 @@ defmodule Ecto.Changeset.MetadataValidator do
       elem, {el_acc, i} when is_binary(elem) and byte_size(elem) <= @max_list_value_length ->
         {el_acc, i + 1}
       elem, {el_acc, i} when is_binary(elem) and byte_size(elem) > @max_list_value_length ->
-        {[{join_atoms(field_path(parent, key), "[:#{i}]"),
+        {[{join_atoms(field_path(parent, key), "[#{i}]"),
           {"list keys should be up to %{max} characters", [validation: :length, max: @max_key_length]}}
         | el_acc], i + 1}
       _, {el_acc, i} ->

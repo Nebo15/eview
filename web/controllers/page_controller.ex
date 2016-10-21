@@ -49,8 +49,8 @@ defmodule Demo.PageController do
     }
 
     validation = schema
-    |> ExJsonSchema.Schema.resolve
-    |> ExJsonSchema.Validator.validate(params["data"])
+    |> NExJsonSchema.Schema.resolve
+    |> NExJsonSchema.Validator.validate(params["data"])
 
     case validation do
       :ok ->
@@ -60,7 +60,7 @@ defmodule Demo.PageController do
       {:error, err} ->
         conn
         |> put_status(422)
-        |> render(EView.ValidationErrorView, "422.json", %{errors: err})
+        |> render(EView.ValidationErrorView, "422.json", %{schema: err})
     end
   end
 

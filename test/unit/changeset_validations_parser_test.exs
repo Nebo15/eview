@@ -650,7 +650,7 @@ defmodule EView.ChangesetValidationsParserTest do
         ]
       },
       %{
-        entry: "$.metadata.string_list[:1]" <> _,
+        entry: "$.metadata.string_list[1]" <> _,
         rules: [
           %{
             description: "list keys should be up to 100 characters",

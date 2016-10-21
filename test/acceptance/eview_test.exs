@@ -311,10 +311,14 @@ defmodule EViewAcceptanceTest do
       "error" => %{
         "invalid" => [
           %{
-            "entry" => "#/originator",
+            "entry" => "$.originator",
             "entry_type" => "json_data_proprty",
             "rules" => [
-              %{"rule" => ~S(Value "me" is not allowed in enum.)}
+              %{
+                "description" => "value is not allowed in enum",
+                "params" => ["a", "b"],
+                "rule" => "inclusion"
+              }
             ]
           }
         ],

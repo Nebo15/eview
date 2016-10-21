@@ -39,7 +39,7 @@ defmodule EView.ValidationErrorView do
   end
 
   # JSON Schema
-  def render("422.json", %{errors: errors}) when is_list(errors) do
+  def render("422.json", %{schema: errors}) when is_list(errors) do
     errors = errors
     |> Enum.map(&map_schema_errors/1)
 
@@ -55,7 +55,7 @@ defmodule EView.ValidationErrorView do
     %{
       entry_type: "json_data_proprty",
       entry: path,
-      rules: [%{rule: rule}]
+      rules: [rule]
     }
   end
 end
