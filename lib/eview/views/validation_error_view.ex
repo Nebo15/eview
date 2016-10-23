@@ -56,7 +56,7 @@ defmodule EView.ValidationErrorView do
 
     defp map_schema_errors({rule, path}) do
       %{
-        entry_type: "json_data_proprty",
+        entry_type: "json_data_property",
         entry: path,
         rules: [rule]
       }

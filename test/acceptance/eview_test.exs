@@ -269,14 +269,14 @@ defmodule EViewAcceptanceTest do
         "invalid" => [
           %{
             "entry" => "$.loans_count",
-            "entry_type" => "json_data_proprty",
+            "entry_type" => "json_data_property",
             "rules" => [
               %{"rule" => "required"}
             ]
           },
           %{
             "entry" => "$.originator",
-            "entry_type" => "json_data_proprty",
+            "entry_type" => "json_data_property",
             "rules" => [
               %{
                 "rule" => "required"
@@ -312,7 +312,7 @@ defmodule EViewAcceptanceTest do
         "invalid" => [
           %{
             "entry" => "$.originator",
-            "entry_type" => "json_data_proprty",
+            "entry_type" => "json_data_property",
             "rules" => [
               %{
                 "description" => "value is not allowed in enum",
