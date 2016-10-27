@@ -1,7 +1,7 @@
 defmodule EView.Mixfile do
   use Mix.Project
 
-  @version "0.2.1"
+  @version "0.2.2"
 
   def project do
     [app: :eview,
@@ -49,7 +49,7 @@ defmodule EView.Mixfile do
      {:poison, "~> 2.0"},
      {:ecto, "~> 2.1.0-rc.3", optional: true}, # TODO: Update when Ecto will release v2.1
      {:credit_card, "~> 1.0", optional: true},
-     {:nex_json_schema, "~> 0.5.1", optional: true},
+     {:nex_json_schema, "~> 0.5.2", optional: true},
      {:postgrex, "~> 0.12", only: [:dev, :test]},
      {:cowboy, "~> 1.0", only: [:dev, :test]},
      {:httpoison, "~> 0.9.2", only: [:dev, :test]},
