@@ -6,13 +6,21 @@ defmodule EView.ErrorView do
         render_errors: [view: EView.ErrorView, accepts: ~w(json)]
   """
 
+  def render("401.json", %{type: type}) when is_atom(type) or is_binary(type) do
+    %{type: type}
+  end
+
+  def render("401.json", _assigns) do
+    %{type: :access_denied}
+  end
+
   @doc """
   This render will be used by-default for non-existent routes. You can use it in your controller:
 
         conn |> render("404.json", error_description)
   """
-  def render("404.json", error_type) when is_atom(error_type) or is_binary(error_type) do
-    %{type: error_type}
+  def render("404.json", %{type: type}) when is_atom(type) or is_binary(type) do
+    %{type: type}
   end
 
   def render("404.json", _assigns) do
@@ -24,8 +32,8 @@ defmodule EView.ErrorView do
 
         conn |> render("500.json", error_description)
   """
-  def render("500.json", error_type) when is_atom(error_type) or is_binary(error_type) do
-    %{type: error_type}
+  def render("500.json", %{type: type}) when is_atom(type) or is_binary(type) do
+    %{type: type}
   end
 
   def render("500.json", _assigns) do
