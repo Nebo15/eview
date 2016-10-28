@@ -75,4 +75,11 @@ defmodule EView.ErrorView do
     }
     |> EView.RootRender.render(assigns[:conn])
   end
+
+  def render("409.json", assigns) do
+    %{
+      type: :request_conflict,
+      message: "The request could not be completed due to a conflict with the current state of the resource."
+    }
+  end
 end
