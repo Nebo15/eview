@@ -18,11 +18,18 @@ defmodule EView.MetaRender do
   end
 
   defp get_url(%Plug.Conn{scheme: scheme, host: host, port: 80, path_info: path_info}) do
-    Atom.to_string(scheme) <> "://" <> host <> "/" <> Path.join(path_info)
+    Atom.to_string(scheme) <> "://" <> host <> "/" <> get_path(path_info)
   end
 
   defp get_url(%Plug.Conn{scheme: scheme, host: host, port: port, path_info: path_info}) do
-    Atom.to_string(scheme) <> "://" <> host <> ":" <> to_string(port) <> "/" <> Path.join(path_info)
+    Atom.to_string(scheme) <> "://" <> host <> ":" <> to_string(port) <> "/" <> get_path(path_info)
+  end
+
+  defp get_path(path) when is_list(path) do
+    case List.first(path) do
+      nil -> ""
+      _ -> Path.join(path)
+    end
   end
 
   defp get_http_status(%Plug.Conn{status: status}) when not is_nil(status), do: status
