@@ -1,7 +1,7 @@
 defmodule EView.Mixfile do
   use Mix.Project
 
-  @version "0.2.5"
+  @version "0.2.7"
 
   def project do
     [app: :eview,
@@ -23,8 +23,7 @@ defmodule EView.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger],
-     included_applications: [:poison, :plug]]
+    [applications: [:logger, :poison, :plug]]
   end
 
   # Specifies which paths to compile per environment.

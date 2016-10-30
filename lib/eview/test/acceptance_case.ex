@@ -19,8 +19,8 @@ defmodule EView.AcceptanceCase do
 
       # Configure acceptance testing on different host:port
       conf = Application.get_env(opts[:otp_app], opts[:endpoint])
-      host = conf[:http][:host] || "localhost"
-      port = conf[:http][:port]
+      host = System.get_env("CONTAINER_HTTP_HOST") || conf[:http][:host] || "localhost"
+      port = System.get_env("CONTAINER_HTTP_PORT") || conf[:http][:port]
 
       @http_uri "http://#{host}:#{port}/"
       @repo opts[:repo]
