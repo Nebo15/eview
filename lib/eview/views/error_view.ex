@@ -10,6 +10,13 @@ defmodule EView.ErrorView do
     %{type: type}
   end
 
+  def render("401.json", %{invalid: invalid}) do
+    %{
+      type: :access_denied,
+      invalid: invalid
+    }
+  end
+
   def render("401.json", _assigns) do
     %{type: :access_denied}
   end
