@@ -11,18 +11,22 @@ defmodule EView.DataRender do
   """
   def render(data, _conn) when is_list(data), do: data
   def render(%{type: _} = data, _conn), do: data
+  def render(%{"type" => _} = data, _conn), do: data
 
   def render(data, conn) when is_map(data) do
     data
     |> add_object_name(conn)
   end
 
-  defp add_object_name(data, %{private: %{phoenix_view: view_module}}) do
+  defp add_object_name(data, %{private: %{phoenix_view: view_module}}) when data != %{} do
     data
     |> Map.put_new(:type, extract_object_name(view_module))
   end
 
-  defp extract_object_name(view_module) do
+  defp add_object_name(data, %{private: %{phoenix_view: view_module}}), do: data
+  defp add_object_name(data, _), do: data
+
+  def extract_object_name(view_module) do
     view_module
     |> to_string
     |> String.split(".")

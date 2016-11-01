@@ -17,12 +17,12 @@ defmodule EView.MetaRender do
     |> put_impotency_key(conn)
   end
 
-  defp get_url(%Plug.Conn{scheme: scheme, host: host, port: 80, path_info: path_info}) do
-    Atom.to_string(scheme) <> "://" <> host <> "/" <> get_path(path_info)
+  defp get_url(%Plug.Conn{scheme: scheme, host: host, port: 80, request_path: request_path}) do
+    Atom.to_string(scheme) <> "://" <> host <> request_path
   end
 
-  defp get_url(%Plug.Conn{scheme: scheme, host: host, port: port, path_info: path_info}) do
-    Atom.to_string(scheme) <> "://" <> host <> ":" <> to_string(port) <> "/" <> get_path(path_info)
+  defp get_url(%Plug.Conn{scheme: scheme, host: host, port: port, request_path: request_path}) do
+    Atom.to_string(scheme) <> "://" <> host <> ":" <> to_string(port) <> request_path
   end
 
   defp get_path(path) when is_list(path) do
