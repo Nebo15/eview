@@ -1,11 +1,9 @@
 defmodule EView.ErrorView do
   @moduledoc """
-  Error view that can be used in Phoenix:
-
-      config :myapp, MyApp.Endpoint,
-        render_errors: [view: EView.ErrorView, accepts: ~w(json)]
+  Views for different kind of 4xx and 5xx error of your application.
   """
   def render(template, assigns \\ %{})
+
   @doc """
   Render error for malformed request (for example when Plug.Parser can't parse content type).
   """
@@ -21,7 +19,7 @@ defmodule EView.ErrorView do
       }],
       message: "Malformed request. Probably, you have sent corrupted JSON."
     }
-    |> EView.RootRender.render(assigns[:conn])
+    |> put_message(assigns)
   end
 
   @doc """
@@ -49,6 +47,7 @@ defmodule EView.ErrorView do
     %{type: :access_denied}
     |> put_type(assigns)
     |> put_invalid(assigns)
+    |> put_message(assigns)
   end
 
   @doc """
@@ -59,16 +58,18 @@ defmodule EView.ErrorView do
   def render("404.json", assigns) do
     %{type: :not_found}
     |> put_type(assigns)
+    |> put_message(assigns)
   end
 
   @doc """
   This render should be used for PUT requests that can not be completed.
   """
-  def render("409.json", _assigns) do
+  def render("409.json", assigns) do
     %{
       type: :request_conflict,
       message: "The request could not be completed due to a conflict with the current state of the resource."
     }
+    |> put_message(assigns)
   end
 
   def render("413.json", assigns) do
@@ -83,7 +84,7 @@ defmodule EView.ErrorView do
       }],
       message: "Request body is too large."
     }
-    |> EView.RootRender.render(assigns[:conn])
+    |> put_message(assigns)
   end
 
   def render("415.json", assigns) do
@@ -97,7 +98,7 @@ defmodule EView.ErrorView do
       message: "Invalid Content-Type header. Try to set 'Content-Type: application/json' header: " <>
                "http://docs.apimanifest.apiary.io/#introduction/interacting-with-api/content-type."
     }
-    |> EView.RootRender.render(assigns[:conn])
+    |> put_message(assigns)
   end
 
   @doc """
@@ -108,6 +109,7 @@ defmodule EView.ErrorView do
   def render("500.json", assigns) do
     %{type: :internal_error}
     |> put_type(assigns)
+    |> put_message(assigns)
   end
 
   defp put_type(body, %{type: type}) when is_atom(type) or is_binary(type) do
@@ -121,4 +123,10 @@ defmodule EView.ErrorView do
     |> Map.put(:invalid, invalid)
   end
   defp put_invalid(body, _), do: body
+
+  defp put_message(body, %{message: message}) when is_binary(message) do
+    body
+    |> Map.put(:message, message)
+  end
+  defp put_message(body, _), do: body
 end

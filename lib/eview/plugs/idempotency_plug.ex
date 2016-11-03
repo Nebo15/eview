@@ -9,7 +9,6 @@ defmodule EView.IdempotencyPlug do
       plug EView.IdempotencyPlug
 
   """
-
   @behaviour Plug
 
   import Plug.Conn

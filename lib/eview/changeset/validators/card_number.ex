@@ -1,4 +1,4 @@
-if Code.ensure_loaded?(Ecto) do
+if Code.ensure_loaded?(Ecto) and Code.ensure_loaded?(CreditCard) do
   defmodule EView.Changeset.CardNumberValidator do
     @moduledoc """
     This helper validates card number by luhn algorithm.
