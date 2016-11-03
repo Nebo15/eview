@@ -2,6 +2,8 @@ defmodule EView.Views.Error do
   @moduledoc """
   Views for different kind of 4xx and 5xx error of your application.
   """
+  @internal_error_templates ["500.json", "501.json", "505.json"]
+
   def render(template, assigns \\ %{})
 
   @doc """
@@ -113,7 +115,7 @@ defmodule EView.Views.Error do
 
         conn |> render("500.json", %{type: my_type})
   """
-  def render("500.json", assigns) do
+  def render(template, assigns) when template in @internal_error_templates do
     %{type: :internal_error}
     |> put_type(assigns)
     |> put_message(assigns)
