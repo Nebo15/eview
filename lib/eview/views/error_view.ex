@@ -50,6 +50,13 @@ defmodule EView.Views.Error do
     |> put_message(assigns)
   end
 
+  def render("403.json", assigns) do
+    %{type: :forbidden}
+    |> put_type(assigns)
+    |> put_invalid(assigns)
+    |> put_message(assigns)
+  end
+
   @doc """
   This render will be used by-default for non-existent routes. You can use it in your controller:
 
