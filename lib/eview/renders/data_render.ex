@@ -18,12 +18,10 @@ defmodule EView.DataRender do
     |> add_object_name(conn)
   end
 
-  defp add_object_name(data, %{private: %{phoenix_view: view_module}}) when data != %{} do
+  defp add_object_name(data, %{private: %{phoenix_view: view_module}}) do
     data
     |> Map.put_new(:type, extract_object_name(view_module))
   end
-
-  defp add_object_name(data, %{private: %{phoenix_view: view_module}}), do: data
   defp add_object_name(data, _), do: data
 
   def extract_object_name(view_module) do

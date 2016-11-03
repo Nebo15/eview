@@ -41,7 +41,9 @@ defmodule EView.ValidationErrorView do
   end
 
   if Code.ensure_loaded?(NExJsonSchema) do
-    # JSON Schema
+    @doc """
+    Render a JSON Schema validation error.
+    """
     def render("422.json", %{schema: errors}) when is_list(errors) do
       errors = errors
       |> Enum.map(&map_schema_errors/1)

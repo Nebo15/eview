@@ -12,7 +12,6 @@ defmodule EView do
         plug EView
         plug EView.IdempotencyPlug
   """
-
   @behaviour Plug
 
   import Plug.Conn
@@ -22,15 +21,23 @@ defmodule EView do
   @spec call(Conn.t, any) :: Conn.t
   def call(conn, _options) do
     conn
-    |> register_before_send(&format_reponse/1)
+    |> register_before_send(&update_reponse_body/1)
   end
 
-  def format_reponse(%{resp_body: resp_body} = conn) do
+  defp update_reponse_body(%{resp_body: resp_body} = conn) do
     resp = resp_body
     |> Poison.Parser.parse!
-    |> EView.RootRender.render(conn)
+    |> wrap_body(conn)
     |> Poison.encode_to_iodata!
 
     %{conn | resp_body: resp}
+  end
+
+  @doc """
+  Update `body` and add all meta objects that is required by API Manifest structure.
+  """
+  def wrap_body(body, %Plug.Conn{} = conn) when is_map(body) or is_list(body) do
+    body
+    |> EView.RootRender.render(conn)
   end
 end

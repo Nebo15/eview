@@ -25,13 +25,6 @@ defmodule EView.MetaRender do
     Atom.to_string(scheme) <> "://" <> host <> ":" <> to_string(port) <> request_path
   end
 
-  defp get_path(path) when is_list(path) do
-    case List.first(path) do
-      nil -> ""
-      _ -> Path.join(path)
-    end
-  end
-
   defp get_http_status(%Plug.Conn{status: status}) when not is_nil(status), do: status
   defp get_http_status(_conn), do: 200
 
