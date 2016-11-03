@@ -1,4 +1,4 @@
-defmodule EView.IdempotencyPlugAcceptanceTest do
+defmodule EView.Plugs.IdempotencyAcceptanceTest do
     use EView.AcceptanceCase,
     async: true,
     otp_app: :eview,

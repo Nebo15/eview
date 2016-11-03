@@ -10,7 +10,7 @@ defmodule EView do
   Add to your `endpoint.ex` before Plug.Parsers plug:
 
         plug EView
-        plug EView.IdempotencyPlug
+        plug EView.Plugs.Idempotency
   """
   @behaviour Plug
 

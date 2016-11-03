@@ -10,7 +10,7 @@ defmodule Demo.Endpoint do
   end
 
   plug EView
-  plug EView.IdempotencyPlug
+  plug EView.Plugs.Idempotency
 
   plug Plug.RequestId
   plug Plug.Logger

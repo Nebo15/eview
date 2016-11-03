@@ -1,4 +1,4 @@
-defmodule EView.IdempotencyPlug do
+defmodule EView.Plugs.Idempotency do
   @moduledoc """
   This Plug allows to take `X-Idempotency-Key` header from request and sent it back to client.
 
@@ -6,14 +6,14 @@ defmodule EView.IdempotencyPlug do
 
   Modify your `endpoint.ex` and add before `plug MyApp.Router`:
 
-      plug EView.IdempotencyPlug
+      plug EView.Plugs.Idempotency
 
   """
   @behaviour Plug
 
   import Plug.Conn
 
-  def init(options), do: options
+  def init(opts), do: opts
 
   @spec call(Conn.t, any) :: Conn.t
   def call(conn, _options) do
