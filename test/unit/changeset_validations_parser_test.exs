@@ -37,7 +37,7 @@ defmodule EView.ChangesetValidationsParserTest do
           }
         ]
       }
-    ]} = EView.ValidationErrorView.render("422.json", changeset)
+    ]} = EView.Views.ValidationError.render("422.json", changeset)
   end
 
   test "validate_required/2" do
@@ -54,7 +54,7 @@ defmodule EView.ChangesetValidationsParserTest do
           }
         ]
       }
-    ]} = EView.ValidationErrorView.render("422.json", changeset)
+    ]} = EView.Views.ValidationError.render("422.json", changeset)
   end
 
   test "validate_format/3" do
@@ -75,7 +75,7 @@ defmodule EView.ChangesetValidationsParserTest do
           }
         ]
       }
-    ]} = EView.ValidationErrorView.render("422.json", changeset)
+    ]} = EView.Views.ValidationError.render("422.json", changeset)
   end
 
   test "validate_inclusion/3" do
@@ -95,7 +95,7 @@ defmodule EView.ChangesetValidationsParserTest do
           }
         ]
       }
-    ]} = EView.ValidationErrorView.render("422.json", changeset)
+    ]} = EView.Views.ValidationError.render("422.json", changeset)
   end
 
   test "validate_subset/3" do
@@ -116,7 +116,7 @@ defmodule EView.ChangesetValidationsParserTest do
           }
         ]
       }
-    ]} = EView.ValidationErrorView.render("422.json", changeset)
+    ]} = EView.Views.ValidationError.render("422.json", changeset)
   end
 
   test "validate_exclusion/3" do
@@ -136,7 +136,7 @@ defmodule EView.ChangesetValidationsParserTest do
           }
         ]
       }
-    ]} = EView.ValidationErrorView.render("422.json", changeset)
+    ]} = EView.Views.ValidationError.render("422.json", changeset)
   end
 
   test "validate_length/3 with string" do
@@ -156,7 +156,7 @@ defmodule EView.ChangesetValidationsParserTest do
           }
         ]
       }
-    ]} = EView.ValidationErrorView.render("422.json", changeset)
+    ]} = EView.Views.ValidationError.render("422.json", changeset)
 
     changeset =
       %{"title" => "world"}
@@ -174,7 +174,7 @@ defmodule EView.ChangesetValidationsParserTest do
           }
         ]
       }
-    ]} = EView.ValidationErrorView.render("422.json", changeset)
+    ]} = EView.Views.ValidationError.render("422.json", changeset)
 
     changeset =
       %{"title" => "world"}
@@ -192,7 +192,7 @@ defmodule EView.ChangesetValidationsParserTest do
           }
         ]
       }
-    ]} = EView.ValidationErrorView.render("422.json", changeset)
+    ]} = EView.Views.ValidationError.render("422.json", changeset)
 
     changeset =
       %{"title" => "world"}
@@ -210,7 +210,7 @@ defmodule EView.ChangesetValidationsParserTest do
           }
         ]
       }
-    ]} = EView.ValidationErrorView.render("422.json", changeset)
+    ]} = EView.Views.ValidationError.render("422.json", changeset)
   end
 
   test "validate_length/3 with list" do
@@ -230,7 +230,7 @@ defmodule EView.ChangesetValidationsParserTest do
           }
         ]
       }
-    ]} = EView.ValidationErrorView.render("422.json", changeset)
+    ]} = EView.Views.ValidationError.render("422.json", changeset)
 
     changeset =
       %{"topics" => ["Politics", "Security"]}
@@ -248,7 +248,7 @@ defmodule EView.ChangesetValidationsParserTest do
           }
         ]
       }
-    ]} = EView.ValidationErrorView.render("422.json", changeset)
+    ]} = EView.Views.ValidationError.render("422.json", changeset)
 
     changeset =
       %{"topics" => ["Politics", "Security", "Economy"]}
@@ -266,7 +266,7 @@ defmodule EView.ChangesetValidationsParserTest do
           }
         ]
       }
-    ]} = EView.ValidationErrorView.render("422.json", changeset)
+    ]} = EView.Views.ValidationError.render("422.json", changeset)
 
     changeset =
       %{"topics" => ["Politics", "Security"]}
@@ -284,7 +284,7 @@ defmodule EView.ChangesetValidationsParserTest do
           }
         ]
       }
-    ]} = EView.ValidationErrorView.render("422.json", changeset)
+    ]} = EView.Views.ValidationError.render("422.json", changeset)
   end
 
   test "validate_number/3" do
@@ -305,7 +305,7 @@ defmodule EView.ChangesetValidationsParserTest do
           }
         ]
       }
-    ]} = EView.ValidationErrorView.render("422.json", changeset)
+    ]} = EView.Views.ValidationError.render("422.json", changeset)
 
     # Multiple validations with multiple errors
     changeset =
@@ -323,7 +323,7 @@ defmodule EView.ChangesetValidationsParserTest do
           }
         ]
       }
-    ]} = EView.ValidationErrorView.render("422.json", changeset)
+    ]} = EView.Views.ValidationError.render("422.json", changeset)
   end
 
   test "validate_confirmation/3" do
@@ -343,7 +343,7 @@ defmodule EView.ChangesetValidationsParserTest do
           }
         ]
       }
-    ]} = EView.ValidationErrorView.render("422.json", changeset)
+    ]} = EView.Views.ValidationError.render("422.json", changeset)
 
     changeset =
       %{"title" => "title", "title_confirmation" => nil}
@@ -361,7 +361,7 @@ defmodule EView.ChangesetValidationsParserTest do
           }
         ]
       }
-    ]} = EView.ValidationErrorView.render("422.json", changeset)
+    ]} = EView.Views.ValidationError.render("422.json", changeset)
 
     changeset =
       %{"title" => "title", "title_confirmation" => "not title"}
@@ -379,7 +379,7 @@ defmodule EView.ChangesetValidationsParserTest do
           }
         ]
       }
-    ]} = EView.ValidationErrorView.render("422.json", changeset)
+    ]} = EView.Views.ValidationError.render("422.json", changeset)
 
     changeset =
       %{"title" => "title", "title_confirmation" => "not title"}
@@ -397,7 +397,7 @@ defmodule EView.ChangesetValidationsParserTest do
           }
         ]
       }
-    ]} = EView.ValidationErrorView.render("422.json", changeset)
+    ]} = EView.Views.ValidationError.render("422.json", changeset)
 
     # With blank change
     changeset =
@@ -416,7 +416,7 @@ defmodule EView.ChangesetValidationsParserTest do
           }
         ]
       }
-    ]} = EView.ValidationErrorView.render("422.json", changeset)
+    ]} = EView.Views.ValidationError.render("422.json", changeset)
 
     # With missing change
     changeset =
@@ -435,7 +435,7 @@ defmodule EView.ChangesetValidationsParserTest do
           }
         ]
       }
-    ]} = EView.ValidationErrorView.render("422.json", changeset)
+    ]} = EView.Views.ValidationError.render("422.json", changeset)
   end
 
   test "validate_acceptance/3" do
@@ -455,7 +455,7 @@ defmodule EView.ChangesetValidationsParserTest do
           }
         ]
       }
-    ]} = EView.ValidationErrorView.render("422.json", changeset)
+    ]} = EView.Views.ValidationError.render("422.json", changeset)
 
     changeset =
       %{}
@@ -473,20 +473,20 @@ defmodule EView.ChangesetValidationsParserTest do
           }
         ]
       }
-    ]} = EView.ValidationErrorView.render("422.json", changeset)
+    ]} = EView.Views.ValidationError.render("422.json", changeset)
   end
 
   test "validate_email/3" do
     changeset =
       %{"email" => "email@example.com"}
       |> changeset()
-      |> EView.Changeset.EmailValidator.validate_email(:email)
+      |> EView.Changeset.Validators.Email.validate_email(:email)
     assert changeset.valid?
 
     changeset =
       %{"email" => "plainaddress"}
       |> changeset()
-      |> EView.Changeset.EmailValidator.validate_email(:email)
+      |> EView.Changeset.Validators.Email.validate_email(:email)
     refute changeset.valid?
 
     assert %{invalid: [
@@ -500,20 +500,20 @@ defmodule EView.ChangesetValidationsParserTest do
           }
         ]
       }
-    ]} = EView.ValidationErrorView.render("422.json", changeset)
+    ]} = EView.Views.ValidationError.render("422.json", changeset)
   end
 
   test "validate_phone_number/3" do
     changeset =
       %{"virtual" => "+380631112233"}
       |> changeset()
-      |> EView.Changeset.PhoneNumberValidator.validate_phone_number(:virtual)
+      |> EView.Changeset.Validators.PhoneNumber.validate_phone_number(:virtual)
     assert changeset.valid?
 
     changeset =
       %{"virtual" => "not_a_number"}
       |> changeset()
-      |> EView.Changeset.PhoneNumberValidator.validate_phone_number(:virtual)
+      |> EView.Changeset.Validators.PhoneNumber.validate_phone_number(:virtual)
     refute changeset.valid?
 
     assert %{invalid: [
@@ -527,20 +527,20 @@ defmodule EView.ChangesetValidationsParserTest do
           }
         ]
       }
-    ]} = EView.ValidationErrorView.render("422.json", changeset)
+    ]} = EView.Views.ValidationError.render("422.json", changeset)
   end
 
   test "validate_card_number/3" do
     changeset =
       %{"virtual" => "5457000000000007"}
       |> changeset()
-      |> EView.Changeset.CardNumberValidator.validate_card_number(:virtual)
+      |> EView.Changeset.Validators.CardNumber.validate_card_number(:virtual)
     assert changeset.valid?
 
     changeset =
       %{"virtual" => "5457000000000001"}
       |> changeset()
-      |> EView.Changeset.CardNumberValidator.validate_card_number(:virtual)
+      |> EView.Changeset.Validators.CardNumber.validate_card_number(:virtual)
     refute changeset.valid?
 
     assert %{invalid: [
@@ -554,12 +554,12 @@ defmodule EView.ChangesetValidationsParserTest do
           }
         ]
       }
-    ]} = EView.ValidationErrorView.render("422.json", changeset)
+    ]} = EView.Views.ValidationError.render("422.json", changeset)
 
     changeset =
       %{"virtual" => "5457000000000001"}
       |> changeset()
-      |> EView.Changeset.CardNumberValidator.validate_card_number(:virtual,
+      |> EView.Changeset.Validators.CardNumber.validate_card_number(:virtual,
                                     message: "is not a valid card number. We accept only: %{allowed_card_types}")
     refute changeset.valid?
 
@@ -574,7 +574,7 @@ defmodule EView.ChangesetValidationsParserTest do
           }
         ]
       }
-    ]} = EView.ValidationErrorView.render("422.json", changeset)
+    ]} = EView.Views.ValidationError.render("422.json", changeset)
   end
 
   test "validate_metadata/3" do
@@ -585,13 +585,13 @@ defmodule EView.ChangesetValidationsParserTest do
         "list_key": ["a", "b", "c"]
       }}
       |> changeset()
-      |> EView.Changeset.MetadataValidator.validate_metadata(:metadata)
+      |> EView.Changeset.Validators.Metadata.validate_metadata(:metadata)
     assert changeset.valid?
 
     changeset =
       %{"metadata" => "not_an_object"}
       |> changeset()
-      |> EView.Changeset.MetadataValidator.validate_metadata(:metadata)
+      |> EView.Changeset.Validators.Metadata.validate_metadata(:metadata)
     refute changeset.valid?
 
     assert %{invalid: [
@@ -604,7 +604,7 @@ defmodule EView.ChangesetValidationsParserTest do
           }
         ]
       }
-    ]} = EView.ValidationErrorView.render("422.json", changeset)
+    ]} = EView.Views.ValidationError.render("422.json", changeset)
 
     changeset =
       %{"metadata" => %{
@@ -614,7 +614,7 @@ defmodule EView.ChangesetValidationsParserTest do
         "string_list" => ["a", String.duplicate("bar", 300)]
       }}
       |> changeset()
-      |> EView.Changeset.MetadataValidator.validate_metadata(:metadata)
+      |> EView.Changeset.Validators.Metadata.validate_metadata(:metadata)
 
     refute changeset.valid?
 
@@ -659,6 +659,6 @@ defmodule EView.ChangesetValidationsParserTest do
           }
         ]
       }
-    ]} = EView.ValidationErrorView.render("422.json", changeset)
+    ]} = EView.Views.ValidationError.render("422.json", changeset)
   end
 end

@@ -32,7 +32,7 @@ config :eview,
 config :eview, Demo.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "GJq0cIAxm5Egzg5lpPOibBooSTLWa3qfgoDGRsMpXDCjFkLK3uyTf4wICdyJ6W0Y",
-  render_errors: [view: EView.PhoenixErrorView, accepts: ~w(json)],
+  render_errors: [view: EView.Views.PhoenixError, accepts: ~w(json)],
   http: [port: 4001],
   server: true
 

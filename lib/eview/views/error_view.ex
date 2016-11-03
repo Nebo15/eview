@@ -1,4 +1,4 @@
-defmodule EView.ErrorView do
+defmodule EView.Views.Error do
   @moduledoc """
   Views for different kind of 4xx and 5xx error of your application.
   """

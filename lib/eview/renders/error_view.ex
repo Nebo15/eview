@@ -1,4 +1,4 @@
-defmodule EView.ErrorRender do
+defmodule EView.Renders.Error do
   @moduledoc """
   This module renders `error` property from response structure.
   """

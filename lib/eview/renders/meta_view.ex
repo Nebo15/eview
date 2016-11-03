@@ -1,4 +1,4 @@
-defmodule EView.MetaRender do
+defmodule EView.Renders.Meta do
   @moduledoc """
   This module renders `meta` property from response structure.
   """

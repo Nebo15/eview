@@ -1,4 +1,4 @@
-defmodule EView.DataRender do
+defmodule EView.Renders.Data do
   @moduledoc """
   This module renders `data` property from response structure.
   """

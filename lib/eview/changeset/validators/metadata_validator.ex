@@ -1,5 +1,5 @@
 if Code.ensure_loaded?(Ecto) do
-  defmodule EView.Changeset.MetadataValidator do
+  defmodule EView.Changeset.Validators.Metadata do
     @moduledoc """
     This helper validates metadata corresponding to
     [API Manifest](http://docs.apimanifest.apiary.io/#introduction/optional-features/metadata).

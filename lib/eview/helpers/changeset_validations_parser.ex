@@ -1,8 +1,7 @@
 if Code.ensure_loaded?(Ecto) do
   defmodule EView.Helpers.ChangesetValidationsParser do
-    @moduledoc """
-    This module converts changeset to a error structure described in API Manifest.
-    """
+    @moduledoc false
+    # This module converts changeset to a error structure described in API Manifest.
 
     @enty_type "json_data_property"
     @jsonpath_root "$"

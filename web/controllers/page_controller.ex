@@ -28,7 +28,7 @@ defmodule Demo.PageController do
       _ ->
         conn
         |> put_status(422)
-        |> render(EView.ValidationErrorView, "422.json", changeset)
+        |> render(EView.Views.ValidationError, "422.json", changeset)
     end
   end
 
@@ -60,7 +60,7 @@ defmodule Demo.PageController do
       {:error, err} ->
         conn
         |> put_status(422)
-        |> render(EView.ValidationErrorView, "422.json", %{schema: err})
+        |> render(EView.Views.ValidationError, "422.json", %{schema: err})
     end
   end
 

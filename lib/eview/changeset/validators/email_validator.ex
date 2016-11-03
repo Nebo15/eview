@@ -1,5 +1,5 @@
 if Code.ensure_loaded?(Ecto) do
-  defmodule EView.Changeset.EmailValidator do
+  defmodule EView.Changeset.Validators.Email do
     @moduledoc """
     This helper validates emails by complex regex pattern.
     """

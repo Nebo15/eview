@@ -38,6 +38,6 @@ defmodule EView do
   """
   def wrap_body(body, %Plug.Conn{} = conn) when is_map(body) or is_list(body) do
     body
-    |> EView.RootRender.render(conn)
+    |> EView.Renders.Root.render(conn)
   end
 end

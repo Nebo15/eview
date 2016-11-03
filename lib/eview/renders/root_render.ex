@@ -1,9 +1,9 @@
-defmodule EView.RootRender do
+defmodule EView.Renders.Root do
   @moduledoc """
   This module converts map to a structure that corresponds
   to [Nebo #15 API Manifest](http://docs.apimanifest.apiary.io/) response structure.
   """
-  alias EView.{MetaRender, ErrorRender, DataRender}
+  alias EView.Renders.{Meta, Error, Data}
 
   @data_type_object "object"
   @data_type_list "list"
@@ -17,15 +17,15 @@ defmodule EView.RootRender do
   """
   def render(error, %{status: status} = conn) when 400 <= status and status < 600 do
     %{
-      meta: MetaRender.render(@data_type_object, conn),
-      error: ErrorRender.render(error)
+      meta: Meta.render(@data_type_object, conn),
+      error: Error.render(error)
     }
   end
 
   def render(data, %{assigns: assigns} = conn) do
     %{
-      meta: MetaRender.render(get_data_type(data), conn),
-      data: DataRender.render(data, conn)
+      meta: Meta.render(get_data_type(data), conn),
+      data: Data.render(data, conn)
     }
     |> put_paging(assigns)
     |> put_urgent(assigns)

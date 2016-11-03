@@ -1,5 +1,5 @@
 if Code.ensure_loaded?(Ecto) do
-  defmodule EView.Changeset.PhoneNumberValidator do
+  defmodule EView.Changeset.Validators.PhoneNumber do
     @moduledoc """
     This helper validates phone numbers in international format (with `+:country_code`).
     """

@@ -1,4 +1,4 @@
-defmodule EView.ValidationErrorView do
+defmodule EView.Views.ValidationError do
   @moduledoc """
   This module provides renders that can be used whenever you want to show validation error.
 
@@ -15,7 +15,7 @@ defmodule EView.ValidationErrorView do
         _ ->
           conn
           |> put_status(422)
-          |> render(EView.ValidationErrorView, "422.json", changeset)
+          |> render(EView.Views.ValidationError, "422.json", changeset)
       end
   """
   if Code.ensure_loaded?(Ecto) do

@@ -1,9 +1,9 @@
-defmodule EView.PhoenixErrorView do
+defmodule EView.Views.PhoenixError do
   @moduledoc """
   Error view that can be used in Phoenix:
 
       config :myapp, MyApp.Endpoint,
-        render_errors: [view: EView.ErrorView, accepts: ~w(json)]
+        render_errors: [view: EView.Views.PhoenixError, accepts: ~w(json)]
   """
 
   # In some cases phoenix will drop `register_before_send` functions,
@@ -12,13 +12,13 @@ defmodule EView.PhoenixErrorView do
   def render(template, assigns) when template in @phoenix_throwing_templates do
     template
     |> render_template(assigns)
-    |> EView.RootRender.render(assigns[:conn])
+    |> EView.Renders.Root.render(assigns[:conn])
   end
   def render(template, assigns), do: template |> render_template(assigns)
 
   defp render_template(template, assigns) do
     template
-    |> EView.ErrorView.render(assigns)
+    |> EView.Views.Error.render(assigns)
   end
 
   # In case no render clause matches or no
