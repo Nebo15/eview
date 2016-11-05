@@ -5,9 +5,6 @@ defmodule EView.Renders.Root do
   """
   alias EView.Renders.{Meta, Error, Data}
 
-  @data_type_object "object"
-  @data_type_list "list"
-
   @doc """
   Render response object or error description following to our guidelines.
 
@@ -17,14 +14,14 @@ defmodule EView.Renders.Root do
   """
   def render(error, %{status: status} = conn) when 400 <= status and status < 600 do
     %{
-      meta: Meta.render(@data_type_object, conn),
+      meta: Meta.render(error, conn),
       error: Error.render(error)
     }
   end
 
   def render(data, %{assigns: assigns} = conn) do
     %{
-      meta: Meta.render(get_data_type(data), conn),
+      meta: Meta.render(data, conn),
       data: Data.render(data, conn)
     }
     |> put_paging(assigns)
@@ -53,8 +50,4 @@ defmodule EView.Renders.Root do
     if Mix.env in [:test, :dev], do: Map.put(data, :sandbox, sandbox), else: data
   end
   defp put_sandbox(data, _assigns), do: data
-
-  # Get string for `meta.type` property.
-  defp get_data_type(data) when is_list(data), do: @data_type_list
-  defp get_data_type(_data), do: @data_type_object
 end

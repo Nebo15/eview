@@ -12,7 +12,7 @@ The package can be installed as:
 
     ```elixir
     def deps do
-      [{:eview, "~> 0.6.0"}]
+      [{:eview, "~> 0.7.0"}]
     end
     ```
 
