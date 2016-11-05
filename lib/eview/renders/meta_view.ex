@@ -22,7 +22,7 @@ defmodule EView.Renders.Meta do
     |> put_impotency_key(conn)
   end
 
-  defp get_resourse_url(conn, resrouce_id, status) when status == 201 and not is_nil(resrouce_id) do
+  defp get_resourse_url(conn, resrouce_id, 201) when not is_nil(resrouce_id) do
     get_resourse_url(conn) <> "/"  <> to_string(resrouce_id)
   end
 

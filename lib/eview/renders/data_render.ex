@@ -12,7 +12,6 @@ defmodule EView.Renders.Data do
   def render(data, _conn) when is_list(data), do: data
   def render(%{type: _} = data, _conn), do: data
   def render(%{"type" => _} = data, _conn), do: data
-
   def render(data, conn) when is_map(data) do
     data
     |> add_object_name(conn)
