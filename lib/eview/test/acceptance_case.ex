@@ -28,9 +28,6 @@ defmodule EView.AcceptanceCase do
       @headers opts[:headers] || []
 
       use HTTPoison.Base
-      if Code.ensure_loaded?(Ecto) do
-        import Ecto.Query, only: [from: 2]
-      end
       import EView.AcceptanceCase
       # if opts[:repo] do
       #   alias @repo

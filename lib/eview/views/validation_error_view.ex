@@ -19,8 +19,6 @@ defmodule EView.Views.ValidationError do
       end
   """
   if Code.ensure_loaded?(Ecto) do
-    import EView.Helpers.ChangesetValidationsParser
-
     @doc """
     Use this render template whenever you want to return validation error. Currently is supports:
       * `Ecto.Changeset` errors (you can pass Schema that failed validation or changeset by itself);
@@ -33,7 +31,7 @@ defmodule EView.Views.ValidationError do
     def render("422.json", %Ecto.Changeset{} = changeset) do
       %{
         type: :validation_failed,
-        invalid: changeset_to_rules(changeset),
+        invalid: EView.Helpers.ChangesetValidationsParser.changeset_to_rules(changeset),
         message: "Validation failed. You can find validators description at our API Manifest: " <>
                  "http://docs.apimanifest.apiary.io/#introduction/interacting-with-api/errors."
       }
