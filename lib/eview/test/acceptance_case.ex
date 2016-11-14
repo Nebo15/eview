@@ -28,7 +28,9 @@ defmodule EView.AcceptanceCase do
       @headers opts[:headers] || []
 
       use HTTPoison.Base
-      import Ecto.Query, only: [from: 2]
+      if Code.ensure_loaded?(Ecto) do
+        import Ecto.Query, only: [from: 2]
+      end
       import EView.AcceptanceCase
       # if opts[:repo] do
       #   alias @repo
@@ -38,7 +40,7 @@ defmodule EView.AcceptanceCase do
         @http_uri <> url
       end
 
-      if is_atom(opts[:repo]) and not is_nil(opts[:repo]) and opts[:async] do
+      if is_atom(opts[:repo]) and not is_nil(opts[:repo]) and opts[:async] and Code.ensure_loaded?(Ecto) do
         defp process_request_headers(headers) do
           meta = Phoenix.Ecto.SQL.Sandbox.metadata_for(@repo, self())
 
@@ -65,7 +67,7 @@ defmodule EView.AcceptanceCase do
         |> Poison.decode!
       end
 
-      if is_atom(opts[:repo]) and not is_nil(opts[:repo]) do
+      if is_atom(opts[:repo]) and not is_nil(opts[:repo]) and Code.ensure_loaded?(Ecto) do
         setup tags do
           :ok = Ecto.Adapters.SQL.Sandbox.checkout(@repo)
 
