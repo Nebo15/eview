@@ -55,8 +55,10 @@ defmodule EView.AcceptanceCase do
       end
 
       defp process_request_body(body) do
-        body
-        |> Poison.encode!
+        case body do
+          {:multipart, _} -> body
+          _ -> body |> Poison.encode!
+        end
       end
 
       defp process_response_body(body) do
