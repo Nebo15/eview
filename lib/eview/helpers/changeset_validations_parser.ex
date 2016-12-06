@@ -59,10 +59,6 @@ if Code.ensure_loaded?(Ecto) do
       end)
     end
 
-    defp reduce_rule_params(field, :cast, [{field, }]) do
-
-    end
-
     defp reduce_rule_params(field, validation_name, validations) do
       validations
       |> Keyword.get_values(field)
