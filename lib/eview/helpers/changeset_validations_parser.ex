@@ -104,7 +104,12 @@ if Code.ensure_loaded?(Ecto) do
       }]
     end
 
-    defp errors_flatener({field, errors}, prefix) do
+    defp errors_flatener({field, errors}, prefix) when is_map(errors) do
+      errors
+      |> Enum.flat_map(&errors_flatener(&1, prefix <> @jsonpath_joiner <> to_string(field)))
+    end
+
+    defp errors_flatener({field, errors}, prefix) when is_list(errors) do
       {acc, _} = errors
       |> Enum.reduce({[], 0}, fn inner_errors, {acc, i} ->
         inner_rules = inner_errors

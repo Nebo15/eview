@@ -25,6 +25,7 @@ defmodule EView.ChangesetValidationsParserTest do
     schema "posts" do
       field :title, :string, default: ""
       embeds_many :posts, EView.ChangesetValidationsParserTest.Post
+      embeds_one :post, EView.ChangesetValidationsParserTest.Post
     end
   end
 
@@ -36,6 +37,7 @@ defmodule EView.ChangesetValidationsParserTest do
     schema
     |> cast(params, ~w(title))
     |> cast_embed(:posts, with: &changeset/2)
+    |> cast_embed(:post, with: &changeset/2)
   end
 
   test "cast" do
@@ -56,11 +58,20 @@ defmodule EView.ChangesetValidationsParserTest do
   end
 
   test "cast embed" do
-    changeset = %{posts: [%{upvotes: 11}, %{upvotes: "not_a_integer"}]}
+    changeset = %{posts: [%{upvotes: 11}, %{upvotes: "not_a_integer"}], post: %{upvotes: "not_a_integer"}}
     |> blog_changeset()
     |> validate_required(:title)
 
     assert %{invalid: [
+      %{
+        entry: "$.post.upvotes",
+        rules: [
+          %{
+            rule: :cast,
+            params: [:integer]
+          }
+        ]
+      },
       %{
         entry: "$.posts[1].upvotes",
         rules: [
