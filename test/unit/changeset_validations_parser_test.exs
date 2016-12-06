@@ -19,8 +19,23 @@ defmodule EView.ChangesetValidationsParserTest do
     end
   end
 
+  defmodule Blog do
+    use Ecto.Schema
+
+    schema "posts" do
+      field :title, :string, default: ""
+      embeds_many :posts, EView.ChangesetValidationsParserTest.Post
+    end
+  end
+
   defp changeset(schema \\ %Post{}, params) do
     cast(schema, params, ~w(title body upvotes decimal topics virtual email metadata))
+  end
+
+  defp blog_changeset(schema \\ %Blog{}, params) do
+    schema
+    |> cast(params, ~w(title))
+    |> cast_embed(:posts, with: &changeset/2)
   end
 
   test "cast" do
@@ -34,6 +49,33 @@ defmodule EView.ChangesetValidationsParserTest do
           %{
             rule: :cast,
             params: [:integer]
+          }
+        ]
+      }
+    ]} = EView.Views.ValidationError.render("422.json", changeset)
+  end
+
+  test "cast embed" do
+    changeset = %{posts: [%{upvotes: 11}, %{upvotes: "not_a_integer"}]}
+    |> blog_changeset()
+    |> validate_required(:title)
+
+    assert %{invalid: [
+      %{
+        entry: "$.posts[1].upvotes",
+        rules: [
+          %{
+            rule: :cast,
+            params: [:integer]
+          }
+        ]
+      },
+      %{
+        entry: "$.title",
+        rules: [
+          %{
+            rule: :required,
+            params: []
           }
         ]
       }

@@ -26,8 +26,13 @@ if Code.ensure_loaded?(Ecto) do
           do: put_length_validation(field, validations, opts),
         else: validations
 
+      field
+      |> get_rule(validation_name, validations, message, opts)
+    end
+
+    defp get_rule(field, validation_name, validations, message, opts) do
       %{
-        description: get_rule_description(message, opts),
+        description: message |> get_rule_description(opts),
         rule: opts[:validation],
         params: field |> reduce_rule_params(validation_name, validations) |> cast_rules_type()
       }
@@ -52,6 +57,10 @@ if Code.ensure_loaded?(Ecto) do
         {key, value}, acc ->
           String.replace(acc, "%{#{key}}", to_string(value))
       end)
+    end
+
+    defp reduce_rule_params(field, :cast, [{field, }]) do
+
     end
 
     defp reduce_rule_params(field, validation_name, validations) do
@@ -87,7 +96,7 @@ if Code.ensure_loaded?(Ecto) do
       do: rules
 
     # Recursively flatten errors map
-    defp errors_flatener({field, rules}, prefix) when is_list(rules) do
+    defp errors_flatener({field, [%{rule: _}|_] = rules}, prefix) when is_list(rules) do
       [%{
         entry_type: @enty_type,
         entry: prefix <> @jsonpath_joiner <> to_string(field),
@@ -95,8 +104,16 @@ if Code.ensure_loaded?(Ecto) do
       }]
     end
 
-    defp errors_flatener({field, %{} = nested_errors}, prefix) do
-      Enum.flat_map(nested_errors, &errors_flatener(&1, prefix <> @jsonpath_joiner <> to_string(field)))
+    defp errors_flatener({field, errors}, prefix) do
+      {acc, _} = errors
+      |> Enum.reduce({[], 0}, fn inner_errors, {acc, i} ->
+        inner_rules = inner_errors
+        |> Enum.flat_map(&errors_flatener(&1, "#{prefix}#{@jsonpath_joiner}" <> to_string(field) <> "[#{i}]"))
+
+        {acc ++ inner_rules, i + 1}
+      end)
+
+      acc
     end
   end
 end
