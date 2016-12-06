@@ -152,7 +152,7 @@ defmodule EView.ChangesetValidationsParserTest do
         rules: [
           %{
             rule: :length,
-            params: [min: 6, max: 5, is: 3]
+            params: %{min: 6, max: 5, is: 3}
           }
         ]
       }
@@ -170,7 +170,7 @@ defmodule EView.ChangesetValidationsParserTest do
         rules: [
           %{
             rule: :length,
-            params: [min: 6]
+            params: %{min: 6}
           }
         ]
       }
@@ -188,7 +188,7 @@ defmodule EView.ChangesetValidationsParserTest do
         rules: [
           %{
             rule: :length,
-            params: [max: 4]
+            params: %{max: 4}
           }
         ]
       }
@@ -206,7 +206,7 @@ defmodule EView.ChangesetValidationsParserTest do
         rules: [
           %{
             rule: :length,
-            params: [is: 10]
+            params: %{is: 10}
           }
         ]
       }
@@ -226,7 +226,7 @@ defmodule EView.ChangesetValidationsParserTest do
         rules: [
           %{
             rule: :length,
-            params: [min: 3, max: 3, is: 3]
+            params: %{min: 3, max: 3, is: 3}
           }
         ]
       }
@@ -244,7 +244,7 @@ defmodule EView.ChangesetValidationsParserTest do
         rules: [
           %{
             rule: :length,
-            params: [min: 6, foo: true]
+            params: %{min: 6, foo: true}
           }
         ]
       }
@@ -262,7 +262,7 @@ defmodule EView.ChangesetValidationsParserTest do
         rules: [
           %{
             rule: :length,
-            params: [max: 2]
+            params: %{max: 2}
           }
         ]
       }
@@ -280,7 +280,7 @@ defmodule EView.ChangesetValidationsParserTest do
         rules: [
           %{
             rule: :length,
-            params: [is: 10]
+            params: %{is: 10}
           }
         ]
       }
@@ -301,7 +301,7 @@ defmodule EView.ChangesetValidationsParserTest do
         rules: [
           %{
             rule: :number,
-            params: [greater_than: 0]
+            params: %{greater_than: 0}
           }
         ]
       }
@@ -319,7 +319,7 @@ defmodule EView.ChangesetValidationsParserTest do
         rules: [
           %{
             rule: :number,
-            params: [greater_than: 100, less_than: 0]
+            params: %{greater_than: 100, less_than: 0}
           }
         ]
       }
@@ -625,7 +625,7 @@ defmodule EView.ChangesetValidationsParserTest do
           %{
             description: "value should be up to 500 characters",
             rule: :length,
-            params: [max: 500]
+            params: %{max: 500}
           }
         ]
       },
@@ -645,7 +645,7 @@ defmodule EView.ChangesetValidationsParserTest do
           %{
             description: "key should be up to 100 characters",
             rule: :length,
-            params: [max: 100]
+            params: %{max: 100}
           }
         ]
       },
@@ -655,7 +655,7 @@ defmodule EView.ChangesetValidationsParserTest do
           %{
             description: "list keys should be up to 100 characters",
             rule: :length,
-            params: [max: 100]
+            params: %{max: 100}
           }
         ]
       }

@@ -29,7 +29,7 @@ if Code.ensure_loaded?(Ecto) do
       %{
         description: get_rule_description(message, opts),
         rule: opts[:validation],
-        params: reduce_rule_params(field, validation_name, validations)
+        params: field |> reduce_rule_params(validation_name, validations) |> cast_rules_type()
       }
     end
 
@@ -80,6 +80,11 @@ if Code.ensure_loaded?(Ecto) do
       end)
       |> Enum.uniq
     end
+
+    defp cast_rules_type([h | _] = rules) when is_tuple(h),
+      do: rules |> Enum.into(%{})
+    defp cast_rules_type(rules),
+      do: rules
 
     # Recursively flatten errors map
     defp errors_flatener({field, rules}, prefix) when is_list(rules) do
