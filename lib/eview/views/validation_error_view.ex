@@ -18,6 +18,8 @@ defmodule EView.Views.ValidationError do
           |> render(EView.Views.ValidationError, "422.json", changeset)
       end
   """
+  alias EView.Helpers.Sanitizer
+
   if Code.ensure_loaded?(Ecto) do
     @doc """
     Use this render template whenever you want to return validation error. Currently is supports:
@@ -58,7 +60,7 @@ defmodule EView.Views.ValidationError do
       %{
         entry_type: "json_data_property",
         entry: path,
-        rules: [rule]
+        rules: [Sanitizer.sanitize(rule)]
       }
     end
   end
