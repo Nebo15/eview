@@ -1,4 +1,6 @@
 defmodule EView.Helpers.Sanitizer do
+  @moduledoc false
+
   def sanitize(term) when is_list(term) do
     for item <- term, into: [], do: sanitize(item)
   end
