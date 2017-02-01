@@ -6,7 +6,7 @@ defmodule EView.Mixfile do
   def project do
     [app: :eview,
      description: "Plug that converts response to Nebo #15 API spec format.",
-     package: package,
+     package: package(),
      version: @version,
      elixir: "~> 1.3",
      elixirc_paths: elixirc_paths(Mix.env),
