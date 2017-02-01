@@ -8,7 +8,6 @@ if Code.ensure_loaded?(Ecto) do
 
     @max_key_length 100
     @max_value_length 500
-    @max_keys 25
     @max_list_length 25
     @max_list_value_length 100
 
