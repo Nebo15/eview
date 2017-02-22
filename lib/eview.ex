@@ -24,6 +24,12 @@ defmodule EView do
     |> register_before_send(&update_reponse_body/1)
   end
 
+  defp update_reponse_body(%{resp_body: []} = conn),
+    do: conn
+  defp update_reponse_body(%{resp_body: ""} = conn),
+    do: conn
+  defp update_reponse_body(%{resp_body: nil} = conn),
+    do: conn
   defp update_reponse_body(%{resp_body: resp_body} = conn) do
     resp = resp_body
     |> Poison.Parser.parse!
