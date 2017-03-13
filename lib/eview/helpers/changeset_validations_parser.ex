@@ -15,20 +15,30 @@ if Code.ensure_loaded?(Ecto) do
 
     defp construct_rule(%Ecto.Changeset{validations: validations}, field, {message, opts}) do
       validation_name = opts[:validation]
-
-      # Special case for cast validation that stores type in field that dont match validation name
-      validations = if validation_name == :cast,
-          do: put_cast_validation(field, validations, opts),
-        else: validations
-
-      # Special case for metadata validator that can't modify to changeset validations
-      validations = if validation_name == :length,
-          do: put_length_validation(field, validations, opts),
-        else: validations
-
-      field
-      |> get_rule(validation_name, validations, message, opts)
+      get_rule(
+        field,
+        validation_name,
+        put_validation(validations, validation_name, field, opts),
+        message,
+        opts)
     end
+
+    @doc """
+    Special case for cast validation that stores type in field that dont match validation name
+    """
+    defp put_validation(validations, :cast, field, opts) do
+      [{field, {:cast, opts[:type]}} | validations]
+    end
+
+    @doc """
+    Special case for metadata validator that can't modify to changeset validations
+    """
+    defp put_validation(validations, :length, field, opts) do
+      validation = Keyword.take(opts, [:min, :max, :is])
+      [{field, {:length, validation}} | validations]
+    end
+
+    defp put_validation(validations, _, _field, _opts), do: validations
 
     defp get_rule(field, validation_name, validations, message, opts) do
       %{
@@ -36,15 +46,6 @@ if Code.ensure_loaded?(Ecto) do
         rule: opts[:validation],
         params: field |> reduce_rule_params(validation_name, validations) |> cast_rules_type()
       }
-    end
-
-    defp put_cast_validation(field, validations, opts) do
-      [{field, {:cast, opts[:type]}} | validations]
-    end
-
-    defp put_length_validation(field, validations, opts) do
-      validation = Keyword.take(opts, [:min, :max, :is])
-      [{field, {:length, validation}} | validations]
     end
 
     defp get_rule_description(message, opts) do
