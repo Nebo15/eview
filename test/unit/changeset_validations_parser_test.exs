@@ -47,6 +47,7 @@ defmodule EView.ChangesetValidationsParserTest do
     assert %{invalid: [
       %{
         entry: "$.upvotes",
+        entry_type: "json_data_property",
         rules: [
           %{
             rule: :cast,
@@ -55,6 +56,24 @@ defmodule EView.ChangesetValidationsParserTest do
         ]
       }
     ]} = EView.Views.ValidationError.render("422.json", changeset)
+  end
+
+  test "query entry type" do
+    changeset = %{upvotes: "not_a_integer"} |> changeset()
+    refute changeset.valid?
+
+    assert %{invalid: [
+      %{
+        entry: "$.upvotes",
+        entry_type: "query_parameter",
+        rules: [
+          %{
+            rule: :cast,
+            params: [:integer]
+          }
+        ]
+      }
+    ]} = EView.Views.ValidationError.render("422.query.json", changeset)
   end
 
   test "cast embed" do

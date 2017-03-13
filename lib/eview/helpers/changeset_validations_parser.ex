@@ -3,14 +3,14 @@ if Code.ensure_loaded?(Ecto) do
     @moduledoc false
     # This module converts changeset to a error structure described in API Manifest.
 
-    @enty_type "json_data_property"
+    @entry_type "json_data_property"
     @jsonpath_root "$"
     @jsonpath_joiner "."
 
-    def changeset_to_rules(%Ecto.Changeset{} = changeset) do
+    def changeset_to_rules(%Ecto.Changeset{} = changeset, entry_type \\ @entry_type) do
       changeset
       |> Ecto.Changeset.traverse_errors(&construct_rule/3)
-      |> Enum.flat_map(&errors_flatener(&1, @jsonpath_root))
+      |> Enum.flat_map(&errors_flatener(&1, @jsonpath_root, entry_type))
     end
 
     defp construct_rule(%Ecto.Changeset{validations: validations}, field, {message, opts}) do
@@ -92,24 +92,28 @@ if Code.ensure_loaded?(Ecto) do
       do: rules
 
     # Recursively flatten errors map
-    defp errors_flatener({field, [%{rule: _}|_] = rules}, prefix) when is_list(rules) do
+    defp errors_flatener({field, [%{rule: _}|_] = rules}, prefix, entry_type) when is_list(rules) do
       [%{
-        entry_type: @enty_type,
+        entry_type: entry_type,
         entry: prefix <> @jsonpath_joiner <> to_string(field),
         rules: rules
       }]
     end
 
-    defp errors_flatener({field, errors}, prefix) when is_map(errors) do
+    defp errors_flatener({field, errors}, prefix, entry_type) when is_map(errors) do
       errors
-      |> Enum.flat_map(&errors_flatener(&1, prefix <> @jsonpath_joiner <> to_string(field)))
+      |> Enum.flat_map(&errors_flatener(&1, prefix <> @jsonpath_joiner <> to_string(field), entry_type))
     end
 
-    defp errors_flatener({field, errors}, prefix) when is_list(errors) do
+    defp errors_flatener({field, errors}, prefix, entry_type) when is_list(errors) do
       {acc, _} = errors
       |> Enum.reduce({[], 0}, fn inner_errors, {acc, i} ->
         inner_rules = inner_errors
-        |> Enum.flat_map(&errors_flatener(&1, "#{prefix}#{@jsonpath_joiner}" <> to_string(field) <> "[#{i}]"))
+        |> Enum.flat_map(&errors_flatener(
+             &1,
+             "#{prefix}#{@jsonpath_joiner}" <> to_string(field) <> "[#{i}]",
+             entry_type
+           ))
 
         {acc ++ inner_rules, i + 1}
       end)

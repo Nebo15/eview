@@ -26,14 +26,16 @@ defmodule EView.Views.ValidationError do
       * `Ecto.Changeset` errors (you can pass Schema that failed validation or changeset by itself);
       * `ex_json_schema` validation errors.
     """
-    def render("422.json", %{changeset: changeset}) do
-      render("422.json", changeset)
-    end
+    def render("422.json", %Ecto.Changeset{} = ch), do: render("422.json", ch, "json_data_property")
+    def render("422.json", %{changeset: ch}),       do: render("422.json", ch)
 
-    def render("422.json", %Ecto.Changeset{} = changeset) do
+    def render("422.query.json", %Ecto.Changeset{} = ch), do: render("422.json", ch, "query_parameter")
+    def render("422.query.json", %{changeset: ch}),       do: render("422.json", ch, "query_parameter")
+
+    def render("422.json", %Ecto.Changeset{} = changeset, entry_type) do
       %{
         type: :validation_failed,
-        invalid: EView.Helpers.ChangesetValidationsParser.changeset_to_rules(changeset),
+        invalid: EView.Helpers.ChangesetValidationsParser.changeset_to_rules(changeset, entry_type),
         message: "Validation failed. You can find validators description at our API Manifest: " <>
                  "http://docs.apimanifest.apiary.io/#introduction/interacting-with-api/errors."
       }
