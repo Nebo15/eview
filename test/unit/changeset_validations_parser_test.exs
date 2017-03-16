@@ -12,6 +12,7 @@ defmodule EView.ChangesetValidationsParserTest do
       field :decimal, :decimal
       field :upvotes, :integer, default: 0
       field :topics, {:array, :string}
+      field :uuids, {:array, Ecto.UUID}
       field :virtual, :string, virtual: true
       field :published_at, :naive_datetime
       field :metadata, :map
@@ -30,7 +31,7 @@ defmodule EView.ChangesetValidationsParserTest do
   end
 
   defp changeset(schema \\ %Post{}, params) do
-    cast(schema, params, ~w(title body upvotes decimal topics virtual email metadata))
+    cast(schema, params, ~w(title body upvotes decimal topics uuids virtual email metadata))
   end
 
   defp blog_changeset(schema \\ %Blog{}, params) do
@@ -74,6 +75,21 @@ defmodule EView.ChangesetValidationsParserTest do
         ]
       }
     ]} = EView.Views.ValidationError.render("422.query.json", changeset)
+  end
+
+  test "cast list with UUID" do
+    changeset = changeset(%Post{}, %{"uuids" => ["invalid"]})
+    assert %{invalid: [
+      %{
+        entry: "$.uuids",
+        rules: [
+          %{
+            rule: :cast,
+            params: [:uuid]
+          }
+        ]
+      }
+    ]} = EView.Views.ValidationError.render("422.json", changeset)
   end
 
   test "cast embed" do
