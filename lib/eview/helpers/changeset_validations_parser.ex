@@ -23,16 +23,12 @@ if Code.ensure_loaded?(Ecto) do
         opts)
     end
 
-    @doc """
-    Special case for cast validation that stores type in field that dont match validation name
-    """
+    # Special case for cast validation that stores type in field that dont match validation name
     defp put_validation(validations, :cast, field, opts) do
       [{field, {:cast, opts[:type]}} | validations]
     end
 
-    @doc """
-    Special case for metadata validator that can't modify to changeset validations
-    """
+    # Special case for metadata validator that can't modify to changeset validations
     defp put_validation(validations, :length, field, opts) do
       validation = Keyword.take(opts, [:min, :max, :is])
       [{field, {:length, validation}} | validations]
@@ -53,6 +49,9 @@ if Code.ensure_loaded?(Ecto) do
         # Lists
         {key, value}, acc when is_list(value) ->
           String.replace(acc, "%{#{key}}", Enum.join(value, ", "))
+
+        {key, {:array, Ecto.UUID}}, acc ->
+          String.replace(acc, "%{#{key}}", "uuid")
 
         # Everything else is a string
         {key, value}, acc ->
@@ -75,6 +74,10 @@ if Code.ensure_loaded?(Ecto) do
         # With regex pattern
         {^validation_name, %Regex{} = regex}, acc ->
           [inspect(regex) | acc]
+
+        # Ecto.UUID rule
+        {^validation_name, {:array, Ecto.UUID}}, acc ->
+          [:uuid | acc]
 
         # Or at least parseable
         {^validation_name, rule_description}, acc ->
