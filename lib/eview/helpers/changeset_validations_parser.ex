@@ -50,9 +50,8 @@ if Code.ensure_loaded?(Ecto) do
         {key, value}, acc when is_list(value) ->
           String.replace(acc, "%{#{key}}", Enum.join(value, ", "))
 
-        # Tuple, e.g. {:array, Ecto.UUID}
-        {key, value}, acc when is_tuple(value) ->
-          String.replace(acc, "%{#{key}}", value |> elem(1) |> to_string())
+        {key, {:array, Ecto.UUID}}, acc ->
+          String.replace(acc, "%{#{key}}", "uuid")
 
         # Everything else is a string
         {key, value}, acc ->
