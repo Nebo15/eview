@@ -44,18 +44,18 @@ defmodule EView.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    [{:plug, "~> 1.2"},
-     {:poison, "~> 2.0"},
-     {:ecto, "~> 2.1.0", optional: true},
+    [{:plug, "~> 1.3"},
+     {:poison, "~> 3.1"},
+     {:ecto, "~> 2.1", optional: true},
      {:credit_card, "~> 1.0", optional: true},
-     {:nex_json_schema, "~> 0.5.2", optional: true},
-     {:postgrex, "~> 0.12", only: [:dev, :test]},
-     {:cowboy, "~> 1.0", only: [:dev, :test]},
-     {:httpoison, "~> 0.9.2", only: [:dev, :test]},
-     {:phoenix, "~> 1.2", only: [:dev, :test]},
+     {:nex_json_schema, "~> 0.6.0", optional: true},
+     {:postgrex, "~> 0.13.2", only: [:dev, :test]},
+     {:cowboy, "~> 1.1", only: [:dev, :test]},
+     {:httpoison, "~> 0.11.1", only: [:dev, :test]},
+     {:phoenix, "~> 1.3.0-rc", only: [:dev, :test]},
      {:ex_doc, ">= 0.0.0", only: [:dev, :test]},
-     {:excoveralls, "~> 0.5", only: [:dev, :test]},
-     {:dogma, "> 0.1.0", only: [:dev, :test]},
+     {:excoveralls, ">= 0.5.0", only: [:dev, :test]},
+     {:dogma, ">= 0.1.0", only: [:dev, :test]},
      {:credo, ">= 0.4.8", only: [:dev, :test]}]
   end
 
