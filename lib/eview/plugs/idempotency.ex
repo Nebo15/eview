@@ -10,7 +10,6 @@ defmodule EView.Plugs.Idempotency do
 
   """
   @behaviour Plug
-
   import Plug.Conn
 
   def init(opts), do: opts
