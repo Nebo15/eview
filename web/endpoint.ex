@@ -15,7 +15,7 @@ defmodule Demo.Endpoint do
   plug Plug.Logger
 
   plug Plug.Parsers,
-    parsers: [:urlencoded, :multipart, :json],
+    parsers: [:json],
     pass: ["application/json"],
     json_decoder: Poison
 

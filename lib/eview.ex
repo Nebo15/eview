@@ -31,6 +31,7 @@ defmodule EView do
   defp update_reponse_body(%{resp_body: nil} = conn),
     do: conn
   defp update_reponse_body(%{resp_body: resp_body} = conn) do
+    IO.inspect "XXX"
     resp = resp_body
     |> Poison.Parser.parse!
     |> wrap_body(conn)

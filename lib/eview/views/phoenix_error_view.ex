@@ -14,7 +14,10 @@ defmodule EView.Views.PhoenixError do
     |> render_template(assigns)
     |> EView.Renders.Root.render(assigns[:conn])
   end
-  def render(template, assigns), do: template |> render_template(assigns)
+  def render(template, assigns) do
+    template
+    |> render_template(assigns)
+  end
 
   defp render_template(template, assigns) do
     template
