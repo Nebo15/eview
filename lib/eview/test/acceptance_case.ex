@@ -45,12 +45,13 @@ defmodule EView.AcceptanceCase do
           |> :erlang.term_to_binary
           |> Base.url_encode64
 
-          [{"content-type", "application/json"},
-           {"user-agent", "BeamMetadata (#{encoded})"}] ++ @headers ++ headers
+          headers ++ @headers ++ [
+            {"content-type", "application/json"},
+            {"user-agent", "BeamMetadata (#{encoded})"}]
         end
       else
         defp process_request_headers(headers) do
-          [{"content-type", "application/json"}] ++ @headers ++ headers
+          headers ++ @headers ++ [{"content-type", "application/json"}]
         end
       end
 
