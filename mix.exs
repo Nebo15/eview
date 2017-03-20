@@ -8,7 +8,7 @@ defmodule EView.Mixfile do
      description: "Plug that converts response to Nebo #15 API spec format.",
      package: package(),
      version: @version,
-     elixir: "~> 1.3",
+     elixir: "~> 1.4",
      elixirc_paths: elixirc_paths(Mix.env),
      compilers: [] ++ Mix.compilers,
      build_embedded: Mix.env == :prod,
