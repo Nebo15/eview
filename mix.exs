@@ -52,7 +52,7 @@ defmodule EView.Mixfile do
      {:postgrex, "~> 0.13.2", only: [:dev, :test]},
      {:cowboy, "~> 1.1", only: [:dev, :test]},
      {:httpoison, "~> 0.11.1", only: [:dev, :test]},
-     {:phoenix, "~> 1.3.0-rc", only: [:dev, :test]},
+     {:phoenix, github: "phoenixframework/phoenix", only: [:dev, :test]},
      {:ex_doc, ">= 0.0.0", only: [:dev, :test]},
      {:excoveralls, ">= 0.5.0", only: [:dev, :test]},
      {:dogma, ">= 0.1.0", only: [:dev, :test]},
