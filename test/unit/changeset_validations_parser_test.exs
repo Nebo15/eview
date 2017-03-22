@@ -128,6 +128,24 @@ defmodule EView.ChangesetValidationsParserTest do
     ]} = EView.Views.ValidationError.render("422.json", changeset)
   end
 
+  test "cast map instead list" do
+    changeset = %{posts: %{upvotes: 11}}
+    |> blog_changeset()
+
+    assert %{invalid: [
+      %{
+        entry: "$.posts",
+        rules: [
+          %{
+            description: "is invalid",
+            rule: :array,
+            params: [:map]
+          }
+        ]
+      }
+    ]} = EView.Views.ValidationError.render("422.json", changeset)
+  end
+
   test "validate_required/2" do
     changeset = %{} |> changeset() |> validate_required(:title)
     refute changeset.valid?

@@ -28,6 +28,10 @@ if Code.ensure_loaded?(Ecto) do
       [{field, {:cast, opts[:type]}} | validations]
     end
 
+    defp put_validation(validations, nil, field, opts) do
+      [{field, {nil, opts[:type]}} | validations]
+    end
+
     # Special case for metadata validator that can't modify to changeset validations
     defp put_validation(validations, :length, field, opts) do
       validation = Keyword.take(opts, [:min, :max, :is])
@@ -39,10 +43,15 @@ if Code.ensure_loaded?(Ecto) do
     defp get_rule(field, validation_name, validations, message, opts) do
       %{
         description: message |> get_rule_description(opts),
-        rule: opts[:validation],
+        rule: get_rule(opts),
         params: field |> reduce_rule_params(validation_name, validations) |> cast_rules_type()
       }
     end
+
+    defp get_rule([validation: validation]), do: validation
+    defp get_rule([_, validation: validation]), do: validation
+    defp get_rule([validation, _]), do: validation
+    defp get_rule([type: {validation, _incoming}]), do: validation
 
     defp get_rule_description(message, opts) do
       Enum.reduce(opts, message, fn
@@ -52,6 +61,9 @@ if Code.ensure_loaded?(Ecto) do
 
         {key, {:array, Ecto.UUID}}, acc ->
           String.replace(acc, "%{#{key}}", "uuid")
+
+        {key, {:array, :map}}, acc ->
+          String.replace(acc, "%{#{key}}", "array")
 
         # Everything else is a string
         {key, value}, acc ->
@@ -78,6 +90,10 @@ if Code.ensure_loaded?(Ecto) do
         # Ecto.UUID rule
         {^validation_name, {:array, Ecto.UUID}}, acc ->
           [:uuid | acc]
+
+        # Ecto {:array, :map} rule
+        {^validation_name, {:array, :map}}, acc ->
+          [:map | acc]
 
         # Or at least parseable
         {^validation_name, rule_description}, acc ->
