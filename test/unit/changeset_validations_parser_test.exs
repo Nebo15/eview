@@ -138,7 +138,7 @@ defmodule EView.ChangesetValidationsParserTest do
         rules: [
           %{
             description: "is invalid",
-            rule: :array,
+            rule: nil,
             params: [:map]
           }
         ]

@@ -43,15 +43,10 @@ if Code.ensure_loaded?(Ecto) do
     defp get_rule(field, validation_name, validations, message, opts) do
       %{
         description: message |> get_rule_description(opts),
-        rule: get_rule(opts),
+        rule: opts[:validation],
         params: field |> reduce_rule_params(validation_name, validations) |> cast_rules_type()
       }
     end
-
-    defp get_rule([validation: validation]), do: validation
-    defp get_rule([_, validation: validation]), do: validation
-    defp get_rule([validation, _]), do: validation
-    defp get_rule([type: {validation, _incoming}]), do: validation
 
     defp get_rule_description(message, opts) do
       Enum.reduce(opts, message, fn
