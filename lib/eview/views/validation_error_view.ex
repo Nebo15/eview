@@ -18,7 +18,6 @@ defmodule EView.Views.ValidationError do
           |> render(EView.Views.ValidationError, "422.json", changeset)
       end
   """
-  alias EView.Helpers.Sanitizer
 
   if Code.ensure_loaded?(Ecto) do
     @doc """
@@ -43,6 +42,8 @@ defmodule EView.Views.ValidationError do
   end
 
   if Code.ensure_loaded?(NExJsonSchema) do
+    alias EView.Helpers.Sanitizer
+
     @doc """
     Render a JSON Schema validation error.
     """
