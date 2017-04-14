@@ -92,6 +92,21 @@ defmodule EView.ChangesetValidationsParserTest do
     ]} = EView.Views.ValidationError.render("422.json", changeset)
   end
 
+  test "cast list with strings" do
+    changeset = changeset(%Post{}, %{"topics" => ["string", "string", :atom]})
+    assert %{invalid: [
+      %{
+        entry: "$.topics",
+        rules: [
+          %{
+            rule: :cast,
+            params: [:strings_array]
+          }
+        ]
+      }
+    ]} = EView.Views.ValidationError.render("422.json", changeset)
+  end
+
   test "cast embed" do
     changeset = %{posts: [%{upvotes: 11}, %{upvotes: "not_a_integer"}], post: %{upvotes: "not_a_integer"}}
     |> blog_changeset()

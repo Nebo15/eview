@@ -50,6 +50,9 @@ if Code.ensure_loaded?(Ecto) do
         {key, value}, acc when is_list(value) ->
           String.replace(acc, "%{#{key}}", Enum.join(value, ", "))
 
+        {key, {:array, :string}}, acc ->
+          String.replace(acc, "%{#{key}}", "string")
+
         {key, {:array, Ecto.UUID}}, acc ->
           String.replace(acc, "%{#{key}}", "uuid")
 
@@ -78,6 +81,17 @@ if Code.ensure_loaded?(Ecto) do
         # Ecto.UUID rule
         {^validation_name, {:array, Ecto.UUID}}, acc ->
           [:uuid | acc]
+
+        # Array of anything
+        # TODO: Return ID of element from Ecto
+        {^validation_name, {:array, type}}, acc when is_atom(type) ->
+          type =
+            type
+            |> Atom.to_string()
+            |> Kernel.<>("s_array")
+            |> String.to_atom()
+
+          [type | acc]
 
         # Or at least parseable
         {^validation_name, rule_description}, acc ->
