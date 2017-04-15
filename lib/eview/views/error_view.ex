@@ -70,6 +70,19 @@ defmodule EView.Views.Error do
     |> put_message(assigns)
   end
 
+  def render("406.json", assigns) do
+    %{
+      type: :content_type_invalid,
+      invalid: [%{
+        entry_type: :header,
+        entry: "Content-Type"
+      }],
+      message: "Content-Type header is missing or invalid. Try to set 'Content-Type: application/json' header: " <>
+               "http://docs.apimanifest.apiary.io/#introduction/interacting-with-api/content-type."
+    }
+    |> put_message(assigns)
+  end
+
   @doc """
   This render should be used for PUT requests that can not be completed.
   """
