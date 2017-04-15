@@ -75,10 +75,9 @@ defmodule EView.Views.Error do
       type: :content_type_invalid,
       invalid: [%{
         entry_type: :header,
-        entry: "Content-Type"
+        entry: "Accept"
       }],
-      message: "Content-Type header is missing or invalid. Try to set 'Content-Type: application/json' header: " <>
-               "http://docs.apimanifest.apiary.io/#introduction/interacting-with-api/content-type."
+      message: "Accept header is missing or invalid. Try to set 'Accept: application/json' header."
     }
     |> put_message(assigns)
   end
