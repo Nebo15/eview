@@ -12,6 +12,7 @@ defmodule EView.ChangesetValidationsParserTest do
       field :decimal, :decimal
       field :upvotes, :integer, default: 0
       field :topics, {:array, :string}
+      field :phones, {:array, :map}
       field :uuids, {:array, Ecto.UUID}
       field :virtual, :string, virtual: true
       field :published_at, :naive_datetime
@@ -31,7 +32,7 @@ defmodule EView.ChangesetValidationsParserTest do
   end
 
   defp changeset(schema \\ %Post{}, params) do
-    cast(schema, params, ~w(title body upvotes decimal topics uuids virtual email metadata))
+    cast(schema, params, ~w(title body upvotes decimal topics phones uuids virtual email metadata))
   end
 
   defp blog_changeset(schema \\ %Blog{}, params) do
@@ -86,6 +87,21 @@ defmodule EView.ChangesetValidationsParserTest do
           %{
             rule: :cast,
             params: [:uuid]
+          }
+        ]
+      }
+    ]} = EView.Views.ValidationError.render("422.json", changeset)
+  end
+
+  test "cast list with phones" do
+    changeset = changeset(%Post{}, %{"phones" => ["invalid"]})
+    assert %{invalid: [
+      %{
+        entry: "$.phones",
+        rules: [
+          %{
+            rule: :cast,
+            params: [:maps_array]
           }
         ]
       }
