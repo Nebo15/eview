@@ -1,7 +1,7 @@
 defmodule EView.Mixfile do
   use Mix.Project
 
-  @version "0.10.5"
+  @version "0.10.6"
 
   def project do
     [app: :eview,
