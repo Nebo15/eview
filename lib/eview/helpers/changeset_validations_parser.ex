@@ -34,7 +34,20 @@ if Code.ensure_loaded?(Ecto) do
       [{field, {:length, validation}} | validations]
     end
 
-    defp put_validation(validations, _, _field, _opts), do: validations
+    # Embeds
+    defp put_validation(validations, nil, field, [type: {_, _} = type]) do
+      [{field, {:cast, type}} | validations]
+    end
+
+    defp put_validation(validations, _, _field, _opts),
+      do: validations
+
+    # Embeds
+    defp get_rule(field, nil, validations, message, [type: {_, _}] = opts) do
+      opts = Keyword.put(opts, :validation, :cast)
+      validation_name = :cast
+      get_rule(field, validation_name, validations, message, opts)
+    end
 
     defp get_rule(field, validation_name, validations, message, opts) do
       %{

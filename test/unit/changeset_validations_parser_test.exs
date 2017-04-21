@@ -124,9 +124,62 @@ defmodule EView.ChangesetValidationsParserTest do
   end
 
   test "cast embed" do
-    changeset = %{posts: [%{upvotes: 11}, %{upvotes: "not_a_integer"}], post: %{upvotes: "not_a_integer"}}
-    |> blog_changeset()
-    |> validate_required(:title)
+    changeset =
+      %{posts: "not an array"}
+      |> blog_changeset()
+      |> validate_required(:title)
+
+    assert %{invalid: [
+      %{
+        entry: "$.posts",
+        rules: [
+          %{
+            rule: :cast,
+            params: [:maps_array]
+          }
+        ]
+      },
+      %{
+        entry: "$.title",
+        rules: [
+          %{
+            rule: :required,
+            params: []
+          }
+        ]
+      }
+    ]} = EView.Views.ValidationError.render("422.json", changeset)
+
+    changeset =
+      %{posts: ["invalid type"]}
+      |> blog_changeset()
+      |> validate_required(:title)
+
+    assert %{invalid: [
+      %{
+        entry: "$.posts",
+        rules: [
+          %{
+            rule: :cast,
+            params: [:maps_array]
+          }
+        ]
+      },
+      %{
+        entry: "$.title",
+        rules: [
+          %{
+            rule: :required,
+            params: []
+          }
+        ]
+      }
+    ]} = EView.Views.ValidationError.render("422.json", changeset)
+
+    changeset =
+      %{posts: [%{upvotes: 11}, %{upvotes: "not_a_integer"}], post: %{upvotes: "not_a_integer"}}
+      |> blog_changeset()
+      |> validate_required(:title)
 
     assert %{invalid: [
       %{
