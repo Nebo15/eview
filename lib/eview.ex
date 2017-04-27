@@ -30,6 +30,8 @@ defmodule EView do
     do: conn
   defp update_reponse_body(%{resp_body: nil} = conn),
     do: conn
+  defp update_reponse_body(%{resp_body: "<" <> resp_body} = conn),
+    do: %{conn | resp_body: resp_body}
   defp update_reponse_body(%{resp_body: resp_body} = conn) do
     resp = resp_body
     |> Poison.Parser.parse!
