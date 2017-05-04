@@ -30,14 +30,8 @@ defmodule EView do
     do: conn
   defp update_reponse_body(%{resp_body: nil} = conn),
     do: conn
-  defp update_reponse_body(%{resp_body: resp_body} = conn) do
-    resp = resp_body
-    |> Poison.Parser.parse!
-    |> wrap_body(conn)
-    |> Poison.encode_to_iodata!
-
-    %{conn | resp_body: resp}
-  end
+  defp update_reponse_body(%{resp_body: resp_body} = conn),
+    do: put_response(conn, resp_body)
 
   @doc """
   Update `body` and add all meta objects that is required by API Manifest structure.
@@ -45,5 +39,19 @@ defmodule EView do
   def wrap_body(body, %Plug.Conn{} = conn) when is_map(body) or is_list(body) do
     body
     |> EView.Renders.Root.render(conn)
+  end
+
+  def put_response(conn, resp_body) do
+    case Poison.Parser.parse(resp_body) do
+      {:ok, result} ->
+        resp =
+          result
+          |> wrap_body(conn)
+          |> Poison.encode_to_iodata!
+
+        %{conn | resp_body: resp}
+      {:error, _} ->
+        %{conn | resp_body: resp_body}
+    end
   end
 end
