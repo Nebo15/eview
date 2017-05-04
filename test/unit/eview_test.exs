@@ -10,7 +10,7 @@ defmodule EView.Test do
 
   test "returns normally parsed response" do
     conn = %Plug.Conn{}
-    resp_body = "{\"a\":1}"
+    resp_body = ~s({"a":1})
 
     %Plug.Conn{resp_body: resp_body} = EView.put_response(conn, resp_body)
 
@@ -20,6 +20,6 @@ defmodule EView.Test do
       |> Poison.decode!
       |> Map.get("data")
 
-    assert %{"a" => 1} = result 
+    assert %{"a" => 1} = result
   end
 end
