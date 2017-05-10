@@ -108,6 +108,26 @@ defmodule EView.ChangesetValidationsParserTest do
     ]} = EView.Views.ValidationError.render("422.json", changeset)
   end
 
+  test "cast list with phone" do
+    changeset =
+      %Blog{}
+      |> cast(%{"post" => "invalid"}, ~w(title))
+      |> cast_embed(:posts, with: &changeset/2)
+      |> cast_embed(:post, with: &changeset/2)
+
+    assert %{invalid: [
+      %{
+        entry: "$.post",
+        rules: [
+          %{
+            rule: :cast,
+            params: [:map]
+          }
+        ]
+      }
+    ]} = EView.Views.ValidationError.render("422.json", changeset)
+  end
+
   test "cast list with strings" do
     changeset = changeset(%Post{}, %{"topics" => ["string", "string", :atom]})
     assert %{invalid: [
@@ -743,6 +763,24 @@ defmodule EView.ChangesetValidationsParserTest do
             rule: :card_number,
             params: [],
             description: "is not a valid card number. We accept only: visa, master_card"
+          }
+        ]
+      }
+    ]} = EView.Views.ValidationError.render("422.json", changeset)
+  end
+
+  test "cast maps" do
+    changeset =
+      %{"metadata" => "{'upvotes': 'not_a_integer'}"}
+      |> changeset()
+
+    assert %{invalid: [
+      %{
+        entry: "$.metadata",
+        rules: [
+          %{
+            rule: :cast,
+            params: [:map]
           }
         ]
       }

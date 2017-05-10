@@ -35,6 +35,11 @@ if Code.ensure_loaded?(Ecto) do
     end
 
     # Embeds
+    defp put_validation(validations, nil, field, [type: :map]) do
+      [{field, {:cast, :map}} | validations]
+    end
+
+    # Embeds Many
     defp put_validation(validations, nil, field, [type: {_, _} = type]) do
       [{field, {:cast, type}} | validations]
     end
@@ -44,6 +49,12 @@ if Code.ensure_loaded?(Ecto) do
 
     # Embeds
     defp get_rule(field, nil, validations, message, [type: {_, _}] = opts) do
+      opts = Keyword.put(opts, :validation, :cast)
+      validation_name = :cast
+      get_rule(field, validation_name, validations, message, opts)
+    end
+
+    defp get_rule(field, nil, validations, message, [type: :map] = opts) do
       opts = Keyword.put(opts, :validation, :cast)
       validation_name = :cast
       get_rule(field, validation_name, validations, message, opts)
