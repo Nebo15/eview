@@ -22,7 +22,7 @@ defmodule EView.Renders.Root do
   def render(data, %{assigns: assigns} = conn) do
     %{
       meta: Meta.render(data, conn),
-      data: Data.render(data, conn)
+      data: data
     }
     |> put_paging(assigns)
     |> put_urgent(assigns)

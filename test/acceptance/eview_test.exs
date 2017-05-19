@@ -18,7 +18,6 @@ defmodule EViewAcceptanceTest do
         "url" => "http://localhost:4001/page"
       },
       "data" => %{
-        "type" => "page",
         "hello" => "Bob"
       }
     } = "page"
