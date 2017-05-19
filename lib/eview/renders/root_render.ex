@@ -3,7 +3,7 @@ defmodule EView.Renders.Root do
   This module converts map to a structure that corresponds
   to [Nebo #15 API Manifest](http://docs.apimanifest.apiary.io/) response structure.
   """
-  alias EView.Renders.{Meta, Error, Data}
+  alias EView.Renders.{Meta, Error}
 
   @doc """
   Render response object or error description following to our guidelines.
