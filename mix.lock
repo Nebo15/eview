@@ -20,7 +20,7 @@
   "metrics": {:hex, :metrics, "1.0.1", "25f094dea2cda98213cecc3aeff09e940299d950904393b2a29d191c346a8486", [:rebar3], []},
   "mime": {:hex, :mime, "1.1.0", "01c1d6f4083d8aa5c7b8c246ade95139620ef8effb009edde934e0ec3b28090a", [:mix], []},
   "mimerl": {:hex, :mimerl, "1.0.2", "993f9b0e084083405ed8252b99460c4f0563e41729ab42d9074fd5e52439be88", [:rebar3], []},
-  "nex_json_schema": {:hex, :nex_json_schema, "0.6.0", "2e87c13defd7dc426549034e778a1b4e2892a283def30bf4af323963aa5bc431", [:mix], []},
+  "nex_json_schema": {:hex, :nex_json_schema, "0.7.0", "e421ef06568b679ef6578a59f371a33164beb5c736f0c2df5d2c5c671616c45d", [:mix], []},
   "phoenix": {:git, "https://github.com/phoenixframework/phoenix.git", "f5061f113223acd6e2d94f52a3e6826b4c77e43a", []},
   "phoenix_ecto": {:hex, :phoenix_ecto, "3.1.0-rc.0", "09bc4b2a5f31f28a36ee2d83b10717b96d8d4da9d34be0493c30ad4e2d780c35", [:mix], [{:ecto, "~> 2.1-rc", [hex: :ecto, optional: false]}, {:phoenix_html, "~> 2.6", [hex: :phoenix_html, optional: true]}, {:plug, "~> 1.0", [hex: :plug, optional: false]}]},
   "phoenix_pubsub": {:hex, :phoenix_pubsub, "1.0.1", "c10ddf6237007c804bf2b8f3c4d5b99009b42eca3a0dfac04ea2d8001186056a", [:mix], []},

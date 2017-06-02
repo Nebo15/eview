@@ -1,7 +1,7 @@
 defmodule EView.Mixfile do
   use Mix.Project
 
-  @version "0.11.1"
+  @version "0.12.0"
 
   def project do
     [app: :eview,
@@ -48,7 +48,7 @@ defmodule EView.Mixfile do
      {:poison, "~> 3.1"},
      {:ecto, "~> 2.1", optional: true},
      {:credit_card, "~> 1.0", optional: true},
-     {:nex_json_schema, "~> 0.6.0", optional: true},
+     {:nex_json_schema, "~> 0.7.0", optional: true},
      {:postgrex, "~> 0.13.2", only: [:dev, :test]},
      {:cowboy, "~> 1.1", only: [:dev, :test]},
      {:httpoison, "~> 0.11.1", only: [:dev, :test]},
