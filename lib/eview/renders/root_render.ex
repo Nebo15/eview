@@ -46,8 +46,10 @@ defmodule EView.Renders.Root do
   defp put_urgent(data, _assigns), do: data
 
   # Add `sandbox` property. To use it just add `sandbox` in `render/2` assigns.
-  defp put_sandbox(data, %{sandbox: sandbox}) do
-    if Mix.env in [:test, :dev], do: Map.put(data, :sandbox, sandbox), else: data
+  if Code.ensure_loaded?(Mix) do
+    defp put_sandbox(data, %{sandbox: sandbox}) do
+      if Mix.env in [:test, :dev], do: Map.put(data, :sandbox, sandbox), else: data
+    end
   end
   defp put_sandbox(data, _assigns), do: data
 end
