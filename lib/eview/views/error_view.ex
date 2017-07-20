@@ -122,6 +122,15 @@ defmodule EView.Views.Error do
     |> put_message(assigns)
   end
 
+  def render("424.json", assigns) do
+    %{
+      type: :failed_dependency,
+      message: "The method could not be performed on the resource because the requested action depended on another " <>
+               "action and that action failed."
+    }
+    |> put_message(assigns)
+  end
+
   @doc """
   This render will be used by-default for internal errors. You can use it in your controller:
 

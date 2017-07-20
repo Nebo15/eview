@@ -22,7 +22,6 @@
   "mimerl": {:hex, :mimerl, "1.0.2", "993f9b0e084083405ed8252b99460c4f0563e41729ab42d9074fd5e52439be88", [:rebar3], []},
   "nex_json_schema": {:hex, :nex_json_schema, "0.7.0", "e421ef06568b679ef6578a59f371a33164beb5c736f0c2df5d2c5c671616c45d", [:mix], []},
   "phoenix": {:git, "https://github.com/phoenixframework/phoenix.git", "71b1c2e85960d4124cec86bc287956ed6c69239a", []},
-  "phoenix_ecto": {:hex, :phoenix_ecto, "3.1.0-rc.0", "09bc4b2a5f31f28a36ee2d83b10717b96d8d4da9d34be0493c30ad4e2d780c35", [:mix], [{:ecto, "~> 2.1-rc", [hex: :ecto, optional: false]}, {:phoenix_html, "~> 2.6", [hex: :phoenix_html, optional: true]}, {:plug, "~> 1.0", [hex: :plug, optional: false]}]},
   "phoenix_pubsub": {:hex, :phoenix_pubsub, "1.0.2", "bfa7fd52788b5eaa09cb51ff9fcad1d9edfeb68251add458523f839392f034c1", [:mix], []},
   "plug": {:hex, :plug, "1.4.0", "e81227c15eb166d2065efe42c902a16c15258002a709246d5fb2453bfb6c0a7d", [:mix], [{:cowboy, "~> 1.0.1 or ~> 1.1", [hex: :cowboy, optional: true]}, {:mime, "~> 1.0", [hex: :mime, optional: false]}]},
   "poison": {:hex, :poison, "3.1.0", "d9eb636610e096f86f25d9a46f35a9facac35609a7591b3be3326e99a0484665", [:mix], []},
