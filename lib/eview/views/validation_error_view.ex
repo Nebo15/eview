@@ -30,6 +30,9 @@ defmodule EView.Views.ValidationError do
 
     def render("422.query.json", %Ecto.Changeset{} = ch), do: render("422.json", ch, "query_parameter")
     def render("422.query.json", %{changeset: ch}),       do: render("422.json", ch, "query_parameter")
+    def render("422.query.json", %{schema: errors} = params) when is_list(errors) do
+      render("422.json", params, "query_parameter")
+    end
 
     def render("422.json", %Ecto.Changeset{} = changeset, entry_type) do
       %{
@@ -47,9 +50,9 @@ defmodule EView.Views.ValidationError do
     @doc """
     Render a JSON Schema validation error.
     """
-    def render("422.json", %{schema: errors}) when is_list(errors) do
+    def render("422.json", %{schema: errors}, entry_type \\ "json_data_property") when is_list(errors) do
       errors = errors
-      |> Enum.map(&map_schema_errors/1)
+      |> Enum.map(&(map_schema_errors(&1, entry_type)))
 
       %{
         type: :validation_failed,
@@ -59,9 +62,9 @@ defmodule EView.Views.ValidationError do
       }
     end
 
-    defp map_schema_errors({rule, path}) do
+    defp map_schema_errors({rule, path}, entry_type) do
       %{
-        entry_type: "json_data_property",
+        entry_type: entry_type,
         entry: path,
         rules: [Sanitizer.sanitize(rule)]
       }
