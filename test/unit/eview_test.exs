@@ -1,5 +1,6 @@
 defmodule EView.Test do
   use ExUnit.Case, async: true
+  alias EView.Renders.Root
 
   test "returns raw response" do
     conn = %Plug.Conn{}
@@ -21,5 +22,19 @@ defmodule EView.Test do
       |> Map.get("data")
 
     assert %{"a" => 1} = result
+  end
+
+  test "paging for list with Scrivener paging format" do
+    paging = %{
+      page_number: 3,
+      page_size: 5,
+      total_pages: 5,
+      total_entries: 25,
+      entries: [],
+    }
+    conn = %Plug.Conn{
+      scheme: :http, host: "test", port: 80, request_path: "test", assigns: %{paging: paging}
+    }
+    assert Map.delete(paging, :entries) == Root.render([%{id: 1}, %{id: 2}], conn).paging
   end
 end
