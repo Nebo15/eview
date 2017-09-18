@@ -31,6 +31,23 @@ defmodule EView.Renders.Root do
 
   # Add `paging` property. To use it just add `paging` in `render/2` assigns.
   defp put_paging(%{meta: %{type: "list"}} = data,
+         %{paging: %{
+           page_number: page_number,
+           page_size: page_size,
+           total_pages: total_pages,
+           total_entries: total_entries,
+         }}) do
+
+    Map.put(data, :paging, %{
+      page_number: page_number,
+      page_size: page_size,
+      total_pages: total_pages,
+      total_entries: total_entries,
+    })
+  end
+
+  # Add `paging` property. To use it just add `paging` in `render/2` assigns.
+  defp put_paging(%{meta: %{type: "list"}} = data,
                   %{paging: %{
                     limit: limit,
                     cursors: %{starting_after: _, ending_before: _},
