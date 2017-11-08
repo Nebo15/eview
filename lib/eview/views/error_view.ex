@@ -2,7 +2,7 @@ defmodule EView.Views.Error do
   @moduledoc """
   Views for different kind of 4xx and 5xx error of your application.
   """
-  @internal_error_templates ["500.json", "501.json", "505.json"]
+  @internal_error_templates ["500.json", "501.json", "503.json", "505.json"]
 
   def render(template, assigns \\ %{})
 
