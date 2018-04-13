@@ -21,6 +21,7 @@ defmodule EView.Views.Error do
       }],
       message: "Malformed request. Probably, you have sent corrupted JSON."
     }
+    |> put_type(assigns)
     |> put_message(assigns)
   end
 
@@ -79,6 +80,7 @@ defmodule EView.Views.Error do
       }],
       message: "Accept header is missing or invalid. Try to set 'Accept: application/json' header."
     }
+    |> put_type(assigns)
     |> put_message(assigns)
   end
 
@@ -91,6 +93,7 @@ defmodule EView.Views.Error do
       message: "The request could not be completed due to a conflict with the current state of the resource."
     }
     |> put_message(assigns)
+    |> put_type(assigns)
   end
 
   def render("413.json", assigns) do
@@ -105,6 +108,7 @@ defmodule EView.Views.Error do
       }],
       message: "Request body is too large."
     }
+    |> put_type(assigns)
     |> put_message(assigns)
   end
 
@@ -119,6 +123,7 @@ defmodule EView.Views.Error do
       message: "Invalid Content-Type header. Try to set 'Content-Type: application/json' header: " <>
                "http://docs.apimanifest.apiary.io/#introduction/interacting-with-api/content-type."
     }
+    |> put_type(assigns)
     |> put_message(assigns)
   end
 
@@ -128,6 +133,7 @@ defmodule EView.Views.Error do
       message: "The method could not be performed on the resource because the requested action depended on another " <>
                "action and that action failed."
     }
+    |> put_type(assigns)
     |> put_message(assigns)
   end
 
