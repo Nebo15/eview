@@ -9,12 +9,16 @@ if Code.ensure_loaded?(Ecto) and Code.ensure_loaded?(CreditCard) do
 
     def validate_card_number(changeset, field, opts \\ []) do
       allowed_card_types = opts[:allowed_card_types] || @allowed_card_types
-      validate_change changeset, field, :credit_card, fn _, value ->
+
+      validate_change(changeset, field, :credit_card, fn _, value ->
         if CreditCard.valid?(value, %{allowed_card_types: allowed_card_types}),
-            do: [],
-          else: [{field, {message(opts, "is not a valid card number"), [validation: :card_number,
-                                                                        allowed_card_types: allowed_card_types]}}]
-      end
+          do: [],
+          else: [
+            {field,
+             {message(opts, "is not a valid card number"),
+              [validation: :card_number, allowed_card_types: allowed_card_types]}}
+          ]
+      end)
     end
 
     defp message(opts, key \\ :message, default) do

@@ -15,12 +15,7 @@ if Code.ensure_loaded?(Ecto) do
 
     defp construct_rule(%Ecto.Changeset{validations: validations}, field, {message, opts}) do
       validation_name = opts[:validation]
-      get_rule(
-        field,
-        validation_name,
-        put_validation(validations, validation_name, field, opts),
-        message,
-        opts)
+      get_rule(field, validation_name, put_validation(validations, validation_name, field, opts), message, opts)
     end
 
     # Special case for cast validation that stores type in field that dont match validation name
@@ -35,17 +30,16 @@ if Code.ensure_loaded?(Ecto) do
     end
 
     # Embeds
-    defp put_validation(validations, nil, field, [type: :map]) do
+    defp put_validation(validations, nil, field, type: :map) do
       [{field, {:cast, :map}} | validations]
     end
 
     # Embeds Many
-    defp put_validation(validations, nil, field, [type: {_, _} = type]) do
+    defp put_validation(validations, nil, field, type: {_, _} = type) do
       [{field, {:cast, type}} | validations]
     end
 
-    defp put_validation(validations, _, _field, _opts),
-      do: validations
+    defp put_validation(validations, _, _field, _opts), do: validations
 
     # Embeds
     defp get_rule(field, nil, validations, message, [type: {_, _}] = opts) do
@@ -128,21 +122,21 @@ if Code.ensure_loaded?(Ecto) do
         _, acc ->
           acc
       end)
-      |> Enum.uniq
+      |> Enum.uniq()
     end
 
-    defp cast_rules_type([h | _] = rules) when is_tuple(h),
-      do: rules |> Enum.into(%{})
-    defp cast_rules_type(rules),
-      do: rules
+    defp cast_rules_type([h | _] = rules) when is_tuple(h), do: rules |> Enum.into(%{})
+    defp cast_rules_type(rules), do: rules
 
     # Recursively flatten errors map
-    defp errors_flatener({field, [%{rule: _}|_] = rules}, prefix, entry_type) when is_list(rules) do
-      [%{
-        entry_type: entry_type,
-        entry: prefix <> @jsonpath_joiner <> to_string(field),
-        rules: rules
-      }]
+    defp errors_flatener({field, [%{rule: _} | _] = rules}, prefix, entry_type) when is_list(rules) do
+      [
+        %{
+          entry_type: entry_type,
+          entry: prefix <> @jsonpath_joiner <> to_string(field),
+          rules: rules
+        }
+      ]
     end
 
     defp errors_flatener({field, errors}, prefix, entry_type) when is_map(errors) do
@@ -151,17 +145,21 @@ if Code.ensure_loaded?(Ecto) do
     end
 
     defp errors_flatener({field, errors}, prefix, entry_type) when is_list(errors) do
-      {acc, _} = errors
-      |> Enum.reduce({[], 0}, fn inner_errors, {acc, i} ->
-        inner_rules = inner_errors
-        |> Enum.flat_map(&errors_flatener(
-             &1,
-             "#{prefix}#{@jsonpath_joiner}" <> to_string(field) <> "[#{i}]",
-             entry_type
-           ))
+      {acc, _} =
+        errors
+        |> Enum.reduce({[], 0}, fn inner_errors, {acc, i} ->
+          inner_rules =
+            inner_errors
+            |> Enum.flat_map(
+              &errors_flatener(
+                &1,
+                "#{prefix}#{@jsonpath_joiner}" <> to_string(field) <> "[#{i}]",
+                entry_type
+              )
+            )
 
-        {acc ++ inner_rules, i + 1}
-      end)
+          {acc ++ inner_rules, i + 1}
+        end)
 
       acc
     end

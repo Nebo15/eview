@@ -26,10 +26,11 @@ defmodule EView.Views.ValidationError do
       * `ex_json_schema` validation errors.
     """
     def render("422.json", %Ecto.Changeset{} = ch), do: render("422.json", ch, "json_data_property")
-    def render("422.json", %{changeset: ch}),       do: render("422.json", ch)
+    def render("422.json", %{changeset: ch}), do: render("422.json", ch)
 
     def render("422.query.json", %Ecto.Changeset{} = ch), do: render("422.json", ch, "query_parameter")
-    def render("422.query.json", %{changeset: ch}),       do: render("422.json", ch, "query_parameter")
+    def render("422.query.json", %{changeset: ch}), do: render("422.json", ch, "query_parameter")
+
     def render("422.query.json", %{schema: errors} = params) when is_list(errors) do
       render("422.json", params, "query_parameter")
     end
@@ -38,8 +39,9 @@ defmodule EView.Views.ValidationError do
       %{
         type: :validation_failed,
         invalid: EView.Helpers.ChangesetValidationsParser.changeset_to_rules(changeset, entry_type),
-        message: "Validation failed. You can find validators description at our API Manifest: " <>
-                 "http://docs.apimanifest.apiary.io/#introduction/interacting-with-api/errors."
+        message:
+          "Validation failed. You can find validators description at our API Manifest: " <>
+            "http://docs.apimanifest.apiary.io/#introduction/interacting-with-api/errors."
       }
     end
   end
@@ -51,14 +53,16 @@ defmodule EView.Views.ValidationError do
     Render a JSON Schema validation error.
     """
     def render("422.json", %{schema: errors}, entry_type \\ "json_data_property") when is_list(errors) do
-      errors = errors
-      |> Enum.map(&(map_schema_errors(&1, entry_type)))
+      errors =
+        errors
+        |> Enum.map(&map_schema_errors(&1, entry_type))
 
       %{
         type: :validation_failed,
         invalid: errors,
-        message: "Validation failed. You can find validators description at our API Manifest: " <>
-                 "http://docs.apimanifest.apiary.io/#introduction/interacting-with-api/errors."
+        message:
+          "Validation failed. You can find validators description at our API Manifest: " <>
+            "http://docs.apimanifest.apiary.io/#introduction/interacting-with-api/errors."
       }
     end
 

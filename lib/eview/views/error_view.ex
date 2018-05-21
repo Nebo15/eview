@@ -13,12 +13,14 @@ defmodule EView.Views.Error do
     # This bitch don't want to handle before_send
     %{
       type: :request_malformed,
-      invalid: [%{
-        entry_type: :request,
-        rules: [
-          %{rule: :json}
-        ]
-      }],
+      invalid: [
+        %{
+          entry_type: :request,
+          rules: [
+            %{rule: :json}
+          ]
+        }
+      ],
       message: "Malformed request. Probably, you have sent corrupted JSON."
     }
     |> put_type(assigns)
@@ -74,10 +76,12 @@ defmodule EView.Views.Error do
   def render("406.json", assigns) do
     %{
       type: :content_type_invalid,
-      invalid: [%{
-        entry_type: :header,
-        entry: "Accept"
-      }],
+      invalid: [
+        %{
+          entry_type: :header,
+          entry: "Accept"
+        }
+      ],
       message: "Accept header is missing or invalid. Try to set 'Accept: application/json' header."
     }
     |> put_type(assigns)
@@ -100,12 +104,14 @@ defmodule EView.Views.Error do
     # This bitch don't want to handle before_send
     %{
       type: :request_too_large,
-      invalid: [%{
-        entry_type: :request,
-        rules: [
-          %{rule: :size}
-        ]
-      }],
+      invalid: [
+        %{
+          entry_type: :request,
+          rules: [
+            %{rule: :size}
+          ]
+        }
+      ],
       message: "Request body is too large."
     }
     |> put_type(assigns)
@@ -116,12 +122,15 @@ defmodule EView.Views.Error do
     # This bitch don't want to handle before_send
     %{
       type: :content_type_invalid,
-      invalid: [%{
-        entry_type: :header,
-        entry: "Content-Type"
-      }],
-      message: "Invalid Content-Type header. Try to set 'Content-Type: application/json' header: " <>
-               "http://docs.apimanifest.apiary.io/#introduction/interacting-with-api/content-type."
+      invalid: [
+        %{
+          entry_type: :header,
+          entry: "Content-Type"
+        }
+      ],
+      message:
+        "Invalid Content-Type header. Try to set 'Content-Type: application/json' header: " <>
+          "http://docs.apimanifest.apiary.io/#introduction/interacting-with-api/content-type."
     }
     |> put_type(assigns)
     |> put_message(assigns)
@@ -130,8 +139,9 @@ defmodule EView.Views.Error do
   def render("424.json", assigns) do
     %{
       type: :failed_dependency,
-      message: "The method could not be performed on the resource because the requested action depended on another " <>
-               "action and that action failed."
+      message:
+        "The method could not be performed on the resource because the requested action depended on another " <>
+          "action and that action failed."
     }
     |> put_type(assigns)
     |> put_message(assigns)
@@ -152,17 +162,20 @@ defmodule EView.Views.Error do
     body
     |> Map.put(:type, type)
   end
+
   defp put_type(body, _), do: body
 
   defp put_invalid(body, %{invalid: invalid}) when is_map(invalid) do
     body
     |> Map.put(:invalid, invalid)
   end
+
   defp put_invalid(body, _), do: body
 
   defp put_message(body, %{message: message}) when is_binary(message) do
     body
     |> Map.put(:message, message)
   end
+
   defp put_message(body, _), do: body
 end

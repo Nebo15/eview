@@ -30,32 +30,36 @@ defmodule EView.Renders.Root do
   end
 
   # Add `paging` property. To use it just add `paging` in `render/2` assigns.
-  defp put_paging(%{meta: %{type: "list"}} = data,
-         %{paging: %{
+  defp put_paging(%{meta: %{type: "list"}} = data, %{
+         paging: %{
            page_number: page_number,
            page_size: page_size,
            total_pages: total_pages,
-           total_entries: total_entries,
-         }}) do
-
+           total_entries: total_entries
+         }
+       }) do
     Map.put(data, :paging, %{
       page_number: page_number,
       page_size: page_size,
       total_pages: total_pages,
-      total_entries: total_entries,
+      total_entries: total_entries
     })
   end
 
   # Add `paging` property. To use it just add `paging` in `render/2` assigns.
-  defp put_paging(%{meta: %{type: "list"}} = data,
-                  %{paging: %{
-                    limit: limit,
-                    cursors: %{starting_after: _, ending_before: _},
-                    has_more: has_more
-                  } = paging}) when is_integer(limit) and is_boolean(has_more) do
+  defp put_paging(%{meta: %{type: "list"}} = data, %{
+         paging:
+           %{
+             limit: limit,
+             cursors: %{starting_after: _, ending_before: _},
+             has_more: has_more
+           } = paging
+       })
+       when is_integer(limit) and is_boolean(has_more) do
     data
     |> Map.put(:paging, paging)
   end
+
   defp put_paging(data, _assigns), do: data
 
   # Add `urgent` property. To use it just add `urgent` in `render/2` assigns.
@@ -65,8 +69,9 @@ defmodule EView.Renders.Root do
   # Add `sandbox` property. To use it just add `sandbox` in `render/2` assigns.
   if Code.ensure_loaded?(Mix) do
     defp put_sandbox(data, %{sandbox: sandbox}) do
-      if Mix.env in [:test, :dev], do: Map.put(data, :sandbox, sandbox), else: data
+      if Mix.env() in [:test, :dev], do: Map.put(data, :sandbox, sandbox), else: data
     end
   end
+
   defp put_sandbox(data, _assigns), do: data
 end
