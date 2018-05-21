@@ -17,8 +17,7 @@ defmodule EView.Test do
 
     result =
       resp_body
-      |> List.to_string()
-      |> Poison.decode!()
+      |> Jason.decode!()
       |> Map.get("data")
 
     assert %{"a" => 1} = result
