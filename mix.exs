@@ -25,7 +25,7 @@ defmodule EView.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger, :poison, :plug]]
+    [applications: [:logger, :jason, :plug]]
   end
 
   # Specifies which paths to compile per environment.
@@ -48,10 +48,10 @@ defmodule EView.Mixfile do
   defp deps do
     [
       {:plug, "~> 1.3"},
-      {:poison, "~> 3.1"},
+      {:jason, "~> 1.0"},
       {:ecto, "~> 2.1", optional: true},
       {:credit_card, "~> 1.0", optional: true},
-      {:nex_json_schema, "~> 0.7.0", optional: true},
+      {:nex_json_schema, "~> 0.8.0", optional: true},
       {:postgrex, "~> 0.13.2", only: [:dev, :test]},
       {:cowboy, "~> 1.1", only: [:dev, :test]},
       {:httpoison, "~> 0.12.0", only: [:dev, :test]},

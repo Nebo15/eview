@@ -38,12 +38,12 @@ defmodule EView do
   end
 
   def put_response(conn, resp_body) do
-    case Poison.Parser.parse(resp_body) do
+    case Jason.decode(resp_body) do
       {:ok, result} ->
         resp =
           result
           |> wrap_body(conn)
-          |> Poison.encode_to_iodata!()
+          |> Jason.encode!()
 
         %{conn | resp_body: resp}
 

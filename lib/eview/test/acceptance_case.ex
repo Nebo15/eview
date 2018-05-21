@@ -57,13 +57,13 @@ defmodule EView.AcceptanceCase do
       defp process_request_body(body) do
         case body do
           {:multipart, _} -> body
-          _ -> body |> Poison.encode!()
+          _ -> body |> Jason.encode!()
         end
       end
 
       defp process_response_body(body) do
         body
-        |> Poison.decode!()
+        |> Jason.decode!()
       end
 
       if is_atom(opts[:repo]) and not is_nil(opts[:repo]) and Code.ensure_loaded?(Ecto) do
