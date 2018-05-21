@@ -11,7 +11,7 @@ defmodule EView.Helpers.Sanitizer do
 
   def sanitize(term) when is_tuple(term) do
     term
-    |> Tuple.to_list
+    |> Tuple.to_list()
     |> sanitize()
   end
 

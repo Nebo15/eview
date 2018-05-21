@@ -14,9 +14,9 @@ if Code.ensure_loaded?(Ecto) do
     @jsonpath_joiner "."
 
     def validate_metadata(changeset, field, opts \\ []) do
-      validate_change changeset, field, :metadata, fn _, value ->
+      validate_change(changeset, field, :metadata, fn _, value ->
         get_metadata_errors(field, value, opts)
-      end
+      end)
     end
 
     defp get_metadata_errors(field, metadata, _opts) when is_map(metadata) do
@@ -34,43 +34,58 @@ if Code.ensure_loaded?(Ecto) do
 
     # Check max length of key
     defp field_validation_reducer(parent, {key, _}, acc) when is_binary(key) and byte_size(key) > @max_key_length do
-      [{field_path(parent, key),
-       {"key should be up to %{max} characters", [validation: :length, max: @max_key_length]}}
-      | acc]
+      [
+        {field_path(parent, key),
+         {"key should be up to %{max} characters", [validation: :length, max: @max_key_length]}}
+        | acc
+      ]
     end
 
     # Check binary value max length
     defp field_validation_reducer(parent, {key, val}, acc) when is_binary(val) and byte_size(val) > @max_value_length do
-      [{field_path(parent, key),
-       {"value should be up to %{max} characters", [validation: :length, max: @max_value_length]}}
-      | acc]
+      [
+        {field_path(parent, key),
+         {"value should be up to %{max} characters", [validation: :length, max: @max_value_length]}}
+        | acc
+      ]
     end
 
     # Check list values
     defp field_validation_reducer(parent, {key, list}, acc) when is_list(list) and length(list) > @max_list_length do
-      [{field_path(parent, key),
-       {"lists should be up to %{max} elements", [validation: :length, max: @max_list_length]}}
-      | acc]
+      [
+        {field_path(parent, key),
+         {"lists should be up to %{max} elements", [validation: :length, max: @max_list_length]}}
+        | acc
+      ]
     end
 
     # Check list elements length
     defp field_validation_reducer(parent, {key, list}, acc) when is_list(list) do
-      {errors, _} = Enum.reduce(list, {[], 0}, fn
-        %Decimal{}, {el_acc, i} ->
-          {el_acc, i + 1}
-        elem, {el_acc, i} when is_float(elem) or is_number(elem) ->
-          {el_acc, i + 1}
-        elem, {el_acc, i} when is_binary(elem) and byte_size(elem) <= @max_list_value_length ->
-          {el_acc, i + 1}
-        elem, {el_acc, i} when is_binary(elem) and byte_size(elem) > @max_list_value_length ->
-          {[{join_atoms(field_path(parent, key), "[#{i}]"),
-            {"list keys should be up to %{max} characters", [validation: :length, max: @max_key_length]}}
-          | el_acc], i + 1}
-        _, {el_acc, i} ->
-          {[{field_path(parent, key),
-            {"one of keys is invalid", [validation: :cast, type: [:integer, :float, :decimal, :string]]}}
-          | el_acc], i + 1}
-      end)
+      {errors, _} =
+        Enum.reduce(list, {[], 0}, fn
+          %Decimal{}, {el_acc, i} ->
+            {el_acc, i + 1}
+
+          elem, {el_acc, i} when is_float(elem) or is_number(elem) ->
+            {el_acc, i + 1}
+
+          elem, {el_acc, i} when is_binary(elem) and byte_size(elem) <= @max_list_value_length ->
+            {el_acc, i + 1}
+
+          elem, {el_acc, i} when is_binary(elem) and byte_size(elem) > @max_list_value_length ->
+            {[
+               {join_atoms(field_path(parent, key), "[#{i}]"),
+                {"list keys should be up to %{max} characters", [validation: :length, max: @max_key_length]}}
+               | el_acc
+             ], i + 1}
+
+          _, {el_acc, i} ->
+            {[
+               {field_path(parent, key),
+                {"one of keys is invalid", [validation: :cast, type: [:integer, :float, :decimal, :string]]}}
+               | el_acc
+             ], i + 1}
+        end)
 
       errors ++ acc
     end
@@ -81,16 +96,17 @@ if Code.ensure_loaded?(Ecto) do
 
     # Pass valid binary keys and values
     defp field_validation_reducer(_parent, {key, val}, acc)
-      when is_binary(key) and byte_size(key) <= @max_key_length
-       and is_binary(val) and byte_size(val) <= @max_value_length do
+         when is_binary(key) and byte_size(key) <= @max_key_length and is_binary(val) and
+                byte_size(val) <= @max_value_length do
       acc
     end
 
     # Everything else is an error
     defp field_validation_reducer(parent, {key, _val}, acc) do
-      [{field_path(parent, key),
-       {"is invalid", [validation: :cast, type: [:integer, :float, :decimal, :string]]}}
-      | acc]
+      [
+        {field_path(parent, key), {"is invalid", [validation: :cast, type: [:integer, :float, :decimal, :string]]}}
+        | acc
+      ]
     end
 
     # Join atom in JSON Path style

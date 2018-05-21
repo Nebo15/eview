@@ -10,11 +10,11 @@ defmodule EView.AcceptanceCase do
   using(opts) do
     quote location: :keep, bind_quoted: [opts: opts] do
       unless opts[:otp_app] do
-        throw "You need to specify `otp_app` when using AcceptanceCase."
+        throw("You need to specify `otp_app` when using AcceptanceCase.")
       end
 
       unless opts[:endpoint] do
-        throw "You need to specify `endpoint` when using AcceptanceCase."
+        throw("You need to specify `endpoint` when using AcceptanceCase.")
       end
 
       # Configure acceptance testing on different host:port
@@ -41,13 +41,12 @@ defmodule EView.AcceptanceCase do
         defp process_request_headers(headers) do
           meta = Phoenix.Ecto.SQL.Sandbox.metadata_for(@repo, self())
 
-          encoded = {:v1, meta}
-          |> :erlang.term_to_binary
-          |> Base.url_encode64
+          encoded =
+            {:v1, meta}
+            |> :erlang.term_to_binary()
+            |> Base.url_encode64()
 
-          headers ++ @headers ++ [
-            {"content-type", "application/json"},
-            {"user-agent", "BeamMetadata (#{encoded})"}]
+          headers ++ @headers ++ [{"content-type", "application/json"}, {"user-agent", "BeamMetadata (#{encoded})"}]
         end
       else
         defp process_request_headers(headers) do
@@ -58,13 +57,13 @@ defmodule EView.AcceptanceCase do
       defp process_request_body(body) do
         case body do
           {:multipart, _} -> body
-          _ -> body |> Poison.encode!
+          _ -> body |> Poison.encode!()
         end
       end
 
       defp process_response_body(body) do
         body
-        |> Poison.decode!
+        |> Poison.decode!()
       end
 
       if is_atom(opts[:repo]) and not is_nil(opts[:repo]) and Code.ensure_loaded?(Ecto) do
@@ -72,8 +71,9 @@ defmodule EView.AcceptanceCase do
           :ok = Ecto.Adapters.SQL.Sandbox.checkout(@repo)
 
           unless tags[:async] do
-             Ecto.Adapters.SQL.Sandbox.mode(@repo, {:shared, self()})
+            Ecto.Adapters.SQL.Sandbox.mode(@repo, {:shared, self()})
           end
+
           :ok
         end
       end

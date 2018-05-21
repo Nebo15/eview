@@ -17,8 +17,8 @@ defmodule EView.Test do
 
     result =
       resp_body
-      |> List.to_string
-      |> Poison.decode!
+      |> List.to_string()
+      |> Poison.decode!()
       |> Map.get("data")
 
     assert %{"a" => 1} = result
@@ -30,11 +30,17 @@ defmodule EView.Test do
       page_size: 5,
       total_pages: 5,
       total_entries: 25,
-      entries: [],
+      entries: []
     }
+
     conn = %Plug.Conn{
-      scheme: :http, host: "test", port: 80, request_path: "test", assigns: %{paging: paging}
+      scheme: :http,
+      host: "test",
+      port: 80,
+      request_path: "test",
+      assigns: %{paging: paging}
     }
+
     assert Map.delete(paging, :entries) == Root.render([%{id: 1}, %{id: 2}], conn).paging
   end
 end

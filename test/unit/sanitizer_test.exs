@@ -8,7 +8,7 @@ defmodule EView.Helpers.SanitizerTest do
   end
 
   test "turns map into sanitized maps" do
-    assert %{a: [1, 2]} = Sanitizer.sanitize(%{a: {1,2}})
+    assert %{a: [1, 2]} = Sanitizer.sanitize(%{a: {1, 2}})
   end
 
   test "turns lists into sanitized lists" do

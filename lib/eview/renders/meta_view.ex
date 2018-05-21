@@ -23,7 +23,7 @@ defmodule EView.Renders.Meta do
   end
 
   defp get_resourse_url(conn, resrouce_id, 201) when not is_nil(resrouce_id) do
-    get_resourse_url(conn) <> "/"  <> to_string(resrouce_id)
+    get_resourse_url(conn) <> "/" <> to_string(resrouce_id)
   end
 
   defp get_resourse_url(conn, _resrouce_id, _status) do
@@ -50,7 +50,7 @@ defmodule EView.Renders.Meta do
   defp get_request_id(conn) do
     conn
     |> get_resp_header("x-request-id")
-    |> List.first
+    |> List.first()
   end
 
   defp put_impotency_key(meta, %Plug.Conn{} = conn) do
@@ -58,6 +58,7 @@ defmodule EView.Renders.Meta do
       [idempotency_key | _] ->
         meta
         |> Map.put(:idempotency_key, idempotency_key)
+
       _ ->
         meta
     end

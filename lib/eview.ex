@@ -18,20 +18,16 @@ defmodule EView do
 
   def init(options), do: options
 
-  @spec call(Conn.t, any) :: Conn.t
+  @spec call(Conn.t(), any) :: Conn.t()
   def call(conn, _options) do
     conn
     |> register_before_send(&update_reponse_body/1)
   end
 
-  defp update_reponse_body(%{resp_body: []} = conn),
-    do: conn
-  defp update_reponse_body(%{resp_body: ""} = conn),
-    do: conn
-  defp update_reponse_body(%{resp_body: nil} = conn),
-    do: conn
-  defp update_reponse_body(%{resp_body: resp_body} = conn),
-    do: put_response(conn, resp_body)
+  defp update_reponse_body(%{resp_body: []} = conn), do: conn
+  defp update_reponse_body(%{resp_body: ""} = conn), do: conn
+  defp update_reponse_body(%{resp_body: nil} = conn), do: conn
+  defp update_reponse_body(%{resp_body: resp_body} = conn), do: put_response(conn, resp_body)
 
   @doc """
   Update `body` and add all meta objects that is required by API Manifest structure.
@@ -47,9 +43,10 @@ defmodule EView do
         resp =
           result
           |> wrap_body(conn)
-          |> Poison.encode_to_iodata!
+          |> Poison.encode_to_iodata!()
 
         %{conn | resp_body: resp}
+
       {:error, _} ->
         %{conn | resp_body: resp_body}
     end

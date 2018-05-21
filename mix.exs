@@ -4,19 +4,21 @@ defmodule EView.Mixfile do
   @version "0.12.5"
 
   def project do
-    [app: :eview,
-     description: "Plug that converts response to Nebo #15 API spec format.",
-     package: package(),
-     version: @version,
-     elixir: "~> 1.4",
-     elixirc_paths: elixirc_paths(Mix.env),
-     compilers: [] ++ Mix.compilers,
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
-     deps: deps(),
-     test_coverage: [tool: ExCoveralls],
-     preferred_cli_env: [coveralls: :test],
-     docs: [source_ref: "v#\{@version\}", main: "readme", extras: ["README.md"]]]
+    [
+      app: :eview,
+      description: "Plug that converts response to Nebo #15 API spec format.",
+      package: package(),
+      version: @version,
+      elixir: "~> 1.4",
+      elixirc_paths: elixirc_paths(Mix.env()),
+      compilers: [] ++ Mix.compilers(),
+      build_embedded: Mix.env() == :prod,
+      start_permanent: Mix.env() == :prod,
+      deps: deps(),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [coveralls: :test],
+      docs: [source_ref: "v#\{@version\}", main: "readme", extras: ["README.md"]]
+    ]
   end
 
   # Configuration for the OTP application
@@ -28,7 +30,7 @@ defmodule EView.Mixfile do
 
   # Specifies which paths to compile per environment.
   defp elixirc_paths(:test), do: ["lib", "web", "test/support"]
-  defp elixirc_paths(_),     do: ["lib", "web"]
+  defp elixirc_paths(_), do: ["lib", "web"]
 
   # Dependencies can be Hex packages:
   #
@@ -44,27 +46,31 @@ defmodule EView.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    [{:plug, "~> 1.3"},
-     {:poison, "~> 3.1"},
-     {:ecto, "~> 2.1", optional: true},
-     {:credit_card, "~> 1.0", optional: true},
-     {:nex_json_schema, "~> 0.7.0", optional: true},
-     {:postgrex, "~> 0.13.2", only: [:dev, :test]},
-     {:cowboy, "~> 1.1", only: [:dev, :test]},
-     {:httpoison, "~> 0.12.0", only: [:dev, :test]},
-     {:phoenix, github: "phoenixframework/phoenix", only: [:dev, :test]},
-     {:ex_doc, ">= 0.0.0", only: [:dev, :test]},
-     {:excoveralls, ">= 0.5.0", only: [:dev, :test]},
-     {:dogma, ">= 0.1.0", only: [:dev, :test]},
-     {:credo, ">= 0.4.8", only: [:dev, :test]}]
+    [
+      {:plug, "~> 1.3"},
+      {:poison, "~> 3.1"},
+      {:ecto, "~> 2.1", optional: true},
+      {:credit_card, "~> 1.0", optional: true},
+      {:nex_json_schema, "~> 0.7.0", optional: true},
+      {:postgrex, "~> 0.13.2", only: [:dev, :test]},
+      {:cowboy, "~> 1.1", only: [:dev, :test]},
+      {:httpoison, "~> 0.12.0", only: [:dev, :test]},
+      {:phoenix, github: "phoenixframework/phoenix", only: [:dev, :test]},
+      {:ex_doc, ">= 0.0.0", only: [:dev, :test]},
+      {:excoveralls, ">= 0.5.0", only: [:dev, :test]},
+      {:dogma, ">= 0.1.0", only: [:dev, :test]},
+      {:credo, ">= 0.4.8", only: [:dev, :test]}
+    ]
   end
 
   # Settings for publishing in Hex package manager:
   defp package do
-    [contributors: ["Nebo #15"],
-     maintainers: ["Nebo #15"],
-     licenses: ["LISENSE.md"],
-     links: %{github: "https://github.com/Nebo15/eview"},
-     files: ~w(lib LICENSE.md mix.exs README.md)]
+    [
+      contributors: ["Nebo #15"],
+      maintainers: ["Nebo #15"],
+      licenses: ["LISENSE.md"],
+      links: %{github: "https://github.com/Nebo15/eview"},
+      files: ~w(lib LICENSE.md mix.exs README.md)
+    ]
   end
 end
