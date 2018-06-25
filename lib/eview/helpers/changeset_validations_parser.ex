@@ -133,15 +133,14 @@ if Code.ensure_loaded?(Ecto) do
       [
         %{
           entry_type: entry_type,
-          entry: prefix <> @jsonpath_joiner <> to_string(field),
+          entry: entry_path(entry_type, prefix, field),
           rules: rules
         }
       ]
     end
 
     defp errors_flatener({field, errors}, prefix, entry_type) when is_map(errors) do
-      errors
-      |> Enum.flat_map(&errors_flatener(&1, prefix <> @jsonpath_joiner <> to_string(field), entry_type))
+      Enum.flat_map(errors, &errors_flatener(&1, entry_path(entry_type, prefix, field), entry_type))
     end
 
     defp errors_flatener({field, errors}, prefix, entry_type) when is_list(errors) do
@@ -153,7 +152,7 @@ if Code.ensure_loaded?(Ecto) do
             |> Enum.flat_map(
               &errors_flatener(
                 &1,
-                "#{prefix}#{@jsonpath_joiner}" <> to_string(field) <> "[#{i}]",
+                entry_path(entry_type, prefix, field) <> "[#{i}]",
                 entry_type
               )
             )
@@ -162,6 +161,14 @@ if Code.ensure_loaded?(Ecto) do
         end)
 
       acc
+    end
+
+    defp entry_path("json_data_property", prefix, field) do
+      prefix <> @jsonpath_joiner <> to_string(field)
+    end
+
+    defp entry_path(_entry_type, _prefix, field) do
+      to_string(field)
     end
   end
 end

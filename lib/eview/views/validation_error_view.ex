@@ -47,8 +47,6 @@ defmodule EView.Views.ValidationError do
   end
 
   if Code.ensure_loaded?(NExJsonSchema) do
-    alias EView.Helpers.Sanitizer
-
     @doc """
     Render a JSON Schema validation error.
     """
@@ -70,7 +68,7 @@ defmodule EView.Views.ValidationError do
       %{
         entry_type: entry_type,
         entry: path,
-        rules: [Sanitizer.sanitize(rule)]
+        rules: [EView.Helpers.Sanitizer.sanitize(rule)]
       }
     end
   end

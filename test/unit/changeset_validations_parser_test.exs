@@ -69,7 +69,7 @@ defmodule EView.ChangesetValidationsParserTest do
     assert %{
              invalid: [
                %{
-                 entry: "$.upvotes",
+                 entry: "upvotes",
                  entry_type: "query_parameter",
                  rules: [
                    %{
@@ -820,7 +820,7 @@ defmodule EView.ChangesetValidationsParserTest do
 
   test "validate_card_number/3" do
     changeset =
-      %{"virtual" => "5457000000000007"}
+      %{"virtual" => "4242424242424242"}
       |> changeset()
       |> EView.Changeset.Validators.CardNumber.validate_card_number(:virtual)
 
