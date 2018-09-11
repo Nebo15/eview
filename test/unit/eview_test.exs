@@ -42,4 +42,29 @@ defmodule EView.Test do
 
     assert Map.delete(paging, :entries) == Root.render([%{id: 1}, %{id: 2}], conn).paging
   end
+
+  test "paging for list with keys as string" do
+    paging = %{
+      "page_number" => 3,
+      "page_size" => 5,
+      "total_pages" => 5,
+      "total_entries" => 25,
+      "entries" => []
+    }
+
+    conn = %Plug.Conn{
+      scheme: :http,
+      host: "test",
+      port: 80,
+      request_path: "test",
+      assigns: %{paging: paging}
+    }
+
+    assert %{
+             page_number: 3,
+             page_size: 5,
+             total_pages: 5,
+             total_entries: 25
+           } == Root.render([%{id: 1}, %{id: 2}], conn).paging
+  end
 end
