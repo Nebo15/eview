@@ -38,7 +38,7 @@ defmodule EView.AcceptanceCase do
       end
 
       if is_atom(opts[:repo]) and not is_nil(opts[:repo]) and opts[:async] and Code.ensure_loaded?(Ecto) do
-        defp process_request_headers(headers) do
+        def process_request_headers(headers) do
           meta = Phoenix.Ecto.SQL.Sandbox.metadata_for(@repo, self())
 
           encoded =
@@ -49,19 +49,19 @@ defmodule EView.AcceptanceCase do
           headers ++ @headers ++ [{"content-type", "application/json"}, {"user-agent", "BeamMetadata (#{encoded})"}]
         end
       else
-        defp process_request_headers(headers) do
+        def process_request_headers(headers) do
           headers ++ @headers ++ [{"content-type", "application/json"}]
         end
       end
 
-      defp process_request_body(body) do
+      def process_request_body(body) do
         case body do
           {:multipart, _} -> body
           _ -> body |> Jason.encode!()
         end
       end
 
-      defp process_response_body(body) do
+      def process_response_body(body) do
         body
         |> Jason.decode!()
       end

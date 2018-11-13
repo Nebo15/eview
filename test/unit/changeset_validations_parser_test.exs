@@ -32,12 +32,12 @@ defmodule EView.ChangesetValidationsParserTest do
   end
 
   defp changeset(schema \\ %Post{}, params) do
-    cast(schema, params, ~w(title body upvotes decimal topics phones uuids virtual email metadata))
+    cast(schema, params, ~w(title body upvotes decimal topics phones uuids virtual email metadata)a)
   end
 
   defp blog_changeset(schema \\ %Blog{}, params) do
     schema
-    |> cast(params, ~w(title))
+    |> cast(params, ~w(title)a)
     |> cast_embed(:posts, with: &changeset/2)
     |> cast_embed(:post, with: &changeset/2)
   end
@@ -121,7 +121,7 @@ defmodule EView.ChangesetValidationsParserTest do
   test "cast list with phone" do
     changeset =
       %Blog{}
-      |> cast(%{"post" => "invalid"}, ~w(title))
+      |> cast(%{"post" => "invalid"}, ~w(title)a)
       |> cast_embed(:posts, with: &changeset/2)
       |> cast_embed(:post, with: &changeset/2)
 

@@ -24,22 +24,26 @@ use Mix.Config
 #
 #     :var_name, "${ENV_VAR_NAME}"
 
-config :eview,
-  namespace: Demo,
-  ecto_repos: []
+if Mix.env() == :test do
+  config :eview,
+    namespace: Demo,
+    ecto_repos: []
 
-# Configures the endpoint
-config :eview, Demo.Endpoint,
-  url: [host: "localhost"],
-  secret_key_base: "GJq0cIAxm5Egzg5lpPOibBooSTLWa3qfgoDGRsMpXDCjFkLK3uyTf4wICdyJ6W0Y",
-  render_errors: [view: EView.Views.PhoenixError, accepts: ~w(json)],
-  http: [port: 4001],
-  server: true
+  # Configures the endpoint
+  config :eview, Demo.Endpoint,
+    url: [host: "localhost"],
+    secret_key_base: "GJq0cIAxm5Egzg5lpPOibBooSTLWa3qfgoDGRsMpXDCjFkLK3uyTf4wICdyJ6W0Y",
+    render_errors: [view: EView.Views.PhoenixError, accepts: ~w(json)],
+    http: [port: 4001],
+    server: true
 
-# Configures Elixir's Logger
-config :logger, :console,
-  format: "$time $metadata[$level] $message\n",
-  metadata: [:request_id]
+  # Configures Elixir's Logger
+  config :logger, :console,
+    format: "$time $metadata[$level] $message\n",
+    metadata: [:request_id]
 
-config :logger, level: :debug
-config :ex_unit, capture_log: true
+  config :phoenix, :json_library, Jason
+
+  config :logger, level: :debug
+  config :ex_unit, capture_log: true
+end

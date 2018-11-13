@@ -338,6 +338,17 @@ defmodule EViewAcceptanceTest do
                        "rule" => "inclusion"
                      }
                    ]
+                 },
+                 %{
+                   "entry" => "$.loans_count",
+                   "entry_type" => "json_data_property",
+                   "rules" => [
+                     %{
+                       "description" => "required property loans_count was not present",
+                       "params" => [],
+                       "rule" => "required"
+                     }
+                   ]
                  }
                ],
                "message" =>

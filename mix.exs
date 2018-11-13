@@ -1,7 +1,7 @@
 defmodule EView.Mixfile do
   use Mix.Project
 
-  @version "0.14.1"
+  @version "0.15.0"
 
   def project do
     [
@@ -25,7 +25,7 @@ defmodule EView.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger, :jason, :plug]]
+    [extra_applications: [:logger]]
   end
 
   # Specifies which paths to compile per environment.
@@ -49,13 +49,13 @@ defmodule EView.Mixfile do
     [
       {:plug, "~> 1.3"},
       {:jason, "~> 1.0"},
-      {:ecto, "~> 2.1", optional: true},
+      {:ecto, "~> 2.1 or ~> 3.0", optional: true},
       {:credit_card, "~> 1.0", optional: true},
       {:nex_json_schema, "~> 0.8.0", optional: true},
-      {:postgrex, "~> 0.13.2", only: [:dev, :test]},
-      {:cowboy, "~> 1.1", only: [:dev, :test]},
-      {:httpoison, "~> 0.12.0", only: [:dev, :test]},
-      {:phoenix, github: "phoenixframework/phoenix", only: [:dev, :test]},
+      {:postgrex, "~> 0.14.0", only: [:dev, :test]},
+      {:plug_cowboy, "~> 2.0", only: [:dev, :test]},
+      {:httpoison, "~> 1.4.0", only: [:dev, :test]},
+      {:phoenix, "~> 1.4", only: [:dev, :test]},
       {:ex_doc, ">= 0.0.0", only: [:dev, :test]},
       {:excoveralls, ">= 0.5.0", only: [:dev, :test]},
       {:credo, ">= 0.4.8", only: [:dev, :test]}
