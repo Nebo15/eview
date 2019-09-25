@@ -1,7 +1,7 @@
 defmodule EView.Mixfile do
   use Mix.Project
 
-  @version "0.15.0"
+  @version "0.16.0"
 
   def project do
     [
@@ -9,7 +9,7 @@ defmodule EView.Mixfile do
       description: "Plug that converts response to Nebo #15 API spec format.",
       package: package(),
       version: @version,
-      elixir: "~> 1.4",
+      elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [] ++ Mix.compilers(),
       build_embedded: Mix.env() == :prod,

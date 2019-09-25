@@ -321,11 +321,6 @@ defmodule EViewAcceptanceTest do
 
   test "renders json schema validation errors" do
     assert %{
-             "meta" => %{
-               "code" => 422,
-               "type" => "object",
-               "url" => "http://localhost:4001/page_via_schema"
-             },
              "error" => %{
                "invalid" => [
                  %{
@@ -334,7 +329,8 @@ defmodule EViewAcceptanceTest do
                    "rules" => [
                      %{
                        "description" => "value is not allowed in enum",
-                       "params" => ["a", "b"],
+                       "params" => %{"values" => ["a", "b"]},
+                       "raw_description" => "value is not allowed in enum",
                        "rule" => "inclusion"
                      }
                    ]
@@ -345,16 +341,21 @@ defmodule EViewAcceptanceTest do
                    "rules" => [
                      %{
                        "description" => "required property loans_count was not present",
-                       "params" => [],
+                       "params" => %{"property" => "loans_count"},
+                       "raw_description" => "required property %{property} was not present",
                        "rule" => "required"
                      }
                    ]
                  }
                ],
                "message" =>
-                 "Validation failed. You can find validators description at our API Manifest: " <>
-                   "http://docs.apimanifest.apiary.io/#introduction/interacting-with-api/errors.",
+                 "Validation failed. You can find validators description at our API Manifest: http://docs.apimanifest.apiary.io/#introduction/interacting-with-api/errors.",
                "type" => "validation_failed"
+             },
+             "meta" => %{
+               "code" => 422,
+               "type" => "object",
+               "url" => "http://localhost:4001/page_via_schema"
              }
            } =
              "page_via_schema"
