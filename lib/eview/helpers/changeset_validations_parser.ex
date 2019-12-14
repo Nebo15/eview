@@ -75,47 +75,44 @@ if Code.ensure_loaded?(Ecto) do
     defp reduce_rule_params(field, validation_name, validations) do
       validations
       |> Keyword.get_values(field)
-      |> Enum.reduce([], fn item, acc -> do_reduce_rule(item, acc, validation_name) end)
+      |> Enum.reduce([], fn
+        # Validation with keywords
+        {^validation_name, [h | _] = keyword}, acc when is_tuple(h) ->
+          keyword ++ acc
+
+        # With list
+        {^validation_name, list}, acc when is_list(list) ->
+          list ++ acc
+
+        # With regex pattern
+        {^validation_name, %Regex{} = regex}, acc ->
+          [inspect(regex) | acc]
+
+        # Ecto.UUID rule
+        {^validation_name, {:array, Ecto.UUID}}, acc ->
+          [:uuid | acc]
+
+        # Array of anything
+        # TODO: Return ID of element from Ecto
+        {^validation_name, {:array, type}}, acc when is_atom(type) ->
+          type =
+            type
+            |> Atom.to_string()
+            |> Kernel.<>("s_array")
+            |> String.to_atom()
+
+          [type | acc]
+
+        # Or at least parseable
+        {^validation_name, rule_description}, acc ->
+          [rule_description | acc]
+
+        # Skip rest
+        _, acc ->
+          acc
+      end)
       |> Enum.uniq()
     end
-
-    defp do_reduce_rule({validation_name, [h | _] = keyword}, acc, validation_name) when is_tuple(h) do
-      # Validation with keywords
-      keyword ++ acc
-    end
-
-    defp do_reduce_rule({validation_name, list}, acc, validation_name) when is_list(list) do
-      list ++ acc
-    end
-
-    defp do_reduce_rule({validation_name, %Regex{} = regex}, acc, validation_name) do
-      # With regex pattern
-      [inspect(regex) | acc]
-    end
-
-    defp do_reduce_rule({validation_name, {:array, Ecto.UUID}}, acc, validation_name) do
-      # Ecto.UUID rule
-      [:uuid | acc]
-    end
-
-    defp do_reduce_rule({validation_name, {:array, type}}, acc, validation_name) when is_atom(type) do
-      # Array of anything
-      # TODO: Return ID of element from Ecto
-      type =
-        type
-        |> Atom.to_string()
-        |> Kernel.<>("s_array")
-        |> String.to_atom()
-
-      [type | acc]
-    end
-
-    defp do_reduce_rule({validation_name, rule_description}, acc, validation_name) do
-      # Or at least parseable
-      [rule_description | acc]
-    end
-
-    defp do_reduce_rule(_, acc, _), do: acc
 
     defp cast_rules_type([h | _] = rules) when is_tuple(h), do: rules |> Enum.into(%{})
     defp cast_rules_type(rules), do: rules
