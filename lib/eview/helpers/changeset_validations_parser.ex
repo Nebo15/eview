@@ -63,6 +63,9 @@ if Code.ensure_loaded?(Ecto) do
         {key, {:array, :map}}, acc ->
           String.replace(acc, "%{#{key}}", "map")
 
+        {key, {:array, atom}}, acc when is_atom(atom) ->
+          String.replace(acc, "%{#{key}}", atom |> Atom.to_string() |> String.split(".") |> List.last() |> String.downcase())
+
         {key, {:array, Ecto.UUID}}, acc ->
           String.replace(acc, "%{#{key}}", "uuid")
 
